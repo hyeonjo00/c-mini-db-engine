@@ -1,0 +1,136 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#0E1218"/>
+  <rect x="0" y="0" width="1200" height="82" fill="#121821"/>
+  <text x="24" y="42" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">MiniDB Studio</text>
+  <text x="24" y="64" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="15">Benchmark lab view powered by the same pure C storage engine</text>
+  <rect x="854" y="22" width="320" height="34" rx="10" fill="#172637" stroke="#5F95FF"/>
+  <text x="872" y="44" fill="#90B7FF" font-family="Segoe UI, Arial, sans-serif" font-size="13">Benchmark completed. 50000-record synthetic workload.</text>
+
+  <rect x="18" y="98" width="336" height="322" rx="18" fill="#181F29" stroke="#364150"/>
+  <text x="36" y="126" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">SQL Workspace</text>
+  <text x="36" y="148" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">The benchmark is still launched through the same editor workflow.</text>
+  <rect x="34" y="170" width="198" height="206" rx="12" fill="#121821" stroke="#5F95FF"/>
+  <rect x="34" y="170" width="30" height="206" rx="12" fill="#17202B"/>
+  <text x="42" y="194" fill="#6F7F95" font-family="Consolas, monospace" font-size="14">1</text>
+  <text x="76" y="194" fill="#7DB4FF" font-family="Consolas, monospace" font-size="18">BENCHMARK</text>
+  <text x="188" y="194" fill="#98DA83" font-family="Consolas, monospace" font-size="18">50000</text>
+  <rect x="244" y="170" width="92" height="156" rx="12" fill="#151C25" stroke="#364150"/>
+  <text x="258" y="190" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Actions</text>
+  <rect x="252" y="206" width="76" height="20" rx="8" fill="#1F2A3A"/>
+  <rect x="252" y="232" width="76" height="20" rx="8" fill="#121821" stroke="#364150"/>
+  <rect x="252" y="258" width="76" height="20" rx="8" fill="#121821" stroke="#364150"/>
+  <text x="275" y="220" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="11">Execute</text>
+  <text x="276" y="246" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="11">Format</text>
+  <text x="283" y="272" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="11">Clear</text>
+  <rect x="34" y="392" width="300" height="16" rx="8" fill="#183126"/>
+  <text x="134" y="404" fill="#7FD69C" font-family="Segoe UI, Arial, sans-serif" font-size="11">Saved Snippet: BENCHMARK 50000</text>
+
+  <rect x="18" y="436" width="336" height="134" rx="18" fill="#181F29" stroke="#364150"/>
+  <text x="36" y="464" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">Storage Browser</text>
+  <text x="36" y="486" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="12">Snapshot + WAL telemetry remains visible during performance runs.</text>
+  <text x="36" y="516" fill="#E9EEF5" font-family="Consolas, monospace" font-size="13">data/db.csv</text>
+  <text x="36" y="538" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="12">WAL 83 KB   |   Records 12450</text>
+  <text x="36" y="558" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="12">Saved 2026-04-08 10:22:04</text>
+  <rect x="248" y="546" width="86" height="18" rx="9" fill="#183126"/>
+  <text x="273" y="558" fill="#7FD69C" font-family="Segoe UI, Arial, sans-serif" font-size="11">Healthy</text>
+
+  <rect x="370" y="98" width="492" height="472" rx="18" fill="#181F29" stroke="#364150"/>
+  <text x="388" y="126" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">Benchmark Lab</text>
+  <text x="388" y="148" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Synthetic workload telemetry for inserts, exact lookups, and range scans.</text>
+
+  <rect x="388" y="170" width="220" height="94" rx="14" fill="#151C25" stroke="#364150"/>
+  <rect x="624" y="170" width="220" height="94" rx="14" fill="#151C25" stroke="#364150"/>
+  <rect x="388" y="280" width="220" height="94" rx="14" fill="#151C25" stroke="#364150"/>
+  <rect x="624" y="280" width="220" height="94" rx="14" fill="#151C25" stroke="#364150"/>
+  <text x="406" y="194" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="12">Insert Throughput</text>
+  <text x="406" y="234" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">248120 rows/sec</text>
+  <text x="642" y="194" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="12">Lookup Latency</text>
+  <text x="642" y="234" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">0.0041 ms/query</text>
+  <text x="406" y="304" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="12">Range Latency</text>
+  <text x="406" y="344" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">0.0398 ms/query</text>
+  <text x="642" y="304" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="12">Memory Footprint</text>
+  <text x="642" y="344" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">9.62 MB</text>
+
+  <rect x="388" y="392" width="456" height="146" rx="14" fill="#151C25" stroke="#364150"/>
+  <text x="406" y="416" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">Benchmark Phase Breakdown</text>
+  <text x="406" y="438" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Dataset: 50000 generated records</text>
+  <rect x="664" y="406" width="164" height="22" rx="10" fill="#3A2C18"/>
+  <rect x="664" y="436" width="164" height="22" rx="10" fill="#1F3350"/>
+  <text x="687" y="421" fill="#EFD493" font-family="Segoe UI, Arial, sans-serif" font-size="11">Hash Index Exact Lookup (id)</text>
+  <text x="684" y="451" fill="#90B7FF" font-family="Segoe UI, Arial, sans-serif" font-size="11">B+ Tree Range Scan (age)</text>
+  <text x="406" y="472" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Insert</text>
+  <rect x="480" y="462" width="250" height="12" rx="6" fill="#1F2A3A"/>
+  <rect x="480" y="462" width="250" height="12" rx="6" fill="#5F95FF"/>
+  <text x="742" y="472" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="12">102.4 ms</text>
+  <text x="406" y="500" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Exact Lookups</text>
+  <rect x="480" y="490" width="250" height="12" rx="6" fill="#1F2A3A"/>
+  <rect x="480" y="490" width="126" height="12" rx="6" fill="#F1C66C"/>
+  <text x="742" y="500" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="12">51.8 ms</text>
+  <text x="406" y="528" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Range Scan</text>
+  <rect x="480" y="518" width="250" height="12" rx="6" fill="#1F2A3A"/>
+  <rect x="480" y="518" width="92" height="12" rx="6" fill="#7FD69C"/>
+  <text x="742" y="528" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="12">37.5 ms</text>
+
+  <rect x="878" y="98" width="304" height="246" rx="18" fill="#181F29" stroke="#364150"/>
+  <text x="896" y="126" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">Execution Plan</text>
+  <text x="896" y="148" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Benchmark mode still reports planner-level detail.</text>
+  <rect x="896" y="178" width="128" height="44" rx="12" fill="#151C25" stroke="#364150"/>
+  <rect x="1038" y="178" width="128" height="44" rx="12" fill="#151C25" stroke="#364150"/>
+  <rect x="896" y="230" width="128" height="44" rx="12" fill="#151C25" stroke="#364150"/>
+  <rect x="1038" y="230" width="128" height="44" rx="12" fill="#151C25" stroke="#364150"/>
+  <text x="912" y="196" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="11">Runtime</text>
+  <text x="912" y="212" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="15">191.7 ms</text>
+  <text x="1054" y="196" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="11">Dataset</text>
+  <text x="1054" y="212" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="15">50000 rows</text>
+  <text x="912" y="248" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="11">Exact Path</text>
+  <text x="912" y="264" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="15">Hash(id)</text>
+  <text x="1054" y="248" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="11">Range Path</text>
+  <text x="1054" y="264" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="15">B+Tree(age)</text>
+  <text x="896" y="314" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="12">Benchmark memory: 9.62 MB</text>
+
+  <rect x="878" y="360" width="304" height="210" rx="18" fill="#181F29" stroke="#364150"/>
+  <text x="896" y="388" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">Index Explorer</text>
+  <text x="896" y="410" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">The benchmark view still surfaces live index structure health.</text>
+  <rect x="896" y="430" width="128" height="54" rx="12" fill="#151C25" stroke="#364150"/>
+  <rect x="1038" y="430" width="128" height="54" rx="12" fill="#151C25" stroke="#4B79D6"/>
+  <text x="912" y="450" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="11">Hash(id)</text>
+  <text x="912" y="470" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="14">50000 entries</text>
+  <text x="1054" y="450" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="11">B+Tree(age)</text>
+  <text x="1054" y="470" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="14">188 nodes | depth 4</text>
+  <text x="896" y="508" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="12">Hash(department): 10 keys / 50000 rows</text>
+  <text x="896" y="526" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="12">B+Tree(id): 170 nodes / depth 4</text>
+  <text x="896" y="546" fill="#7E8CA2" font-family="Segoe UI, Arial, sans-serif" font-size="12">Age leaf chain: 34 leaves</text>
+  <rect x="896" y="554" width="16" height="10" rx="5" fill="#243652"/>
+  <rect x="920" y="554" width="16" height="10" rx="5" fill="#243652"/>
+  <rect x="944" y="554" width="16" height="10" rx="5" fill="#243652"/>
+  <rect x="968" y="554" width="16" height="10" rx="5" fill="#243652"/>
+
+  <rect x="18" y="586" width="1164" height="158" rx="18" fill="#181F29" stroke="#364150"/>
+  <text x="36" y="612" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Performance Dashboard</text>
+  <g>
+    <rect x="32" y="628" width="214" height="98" rx="14" fill="#151C25" stroke="#364150"/>
+    <rect x="260" y="628" width="214" height="98" rx="14" fill="#151C25" stroke="#364150"/>
+    <rect x="488" y="628" width="214" height="98" rx="14" fill="#151C25" stroke="#364150"/>
+    <rect x="716" y="628" width="214" height="98" rx="14" fill="#151C25" stroke="#364150"/>
+    <rect x="944" y="628" width="224" height="98" rx="14" fill="#151C25" stroke="#364150"/>
+  </g>
+  <text x="48" y="650" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Latency Trend</text>
+  <text x="276" y="650" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Rows Scanned</text>
+  <text x="504" y="650" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Memory Usage</text>
+  <text x="732" y="650" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Cache Hit Ratio</text>
+  <text x="960" y="650" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="13">Index Usage Frequency</text>
+  <polyline points="50,708 84,692 118,698 152,670 186,674 220,662" fill="none" stroke="#7EB4FF" stroke-width="3"/>
+  <polyline points="278,708 312,700 346,688 380,680 414,670 448,666" fill="none" stroke="#F1C66C" stroke-width="3"/>
+  <polyline points="506,708 540,700 574,694 608,686 642,682 676,676" fill="none" stroke="#7FD69C" stroke-width="3"/>
+  <polyline points="734,708 768,706 802,702 836,696 870,688 904,680" fill="none" stroke="#9FE67C" stroke-width="3"/>
+  <rect x="980" y="672" width="96" height="12" rx="6" fill="#243652"/>
+  <rect x="980" y="692" width="124" height="12" rx="6" fill="#2E4468"/>
+  <rect x="980" y="712" width="58" height="12" rx="6" fill="#1D2A3A"/>
+
+  <rect x="0" y="752" width="1200" height="48" fill="#121821"/>
+  <text x="18" y="781" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="14">Records: 12450</text>
+  <text x="154" y="781" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="14">Indexes: Hash(id), Hash(department), B+Tree(id), B+Tree(age)</text>
+  <text x="644" y="781" fill="#9AA9BD" font-family="Segoe UI, Arial, sans-serif" font-size="14">Storage: CSV + WAL</text>
+  <text x="838" y="781" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="14">Session Queries: 26</text>
+  <text x="1038" y="781" fill="#E9EEF5" font-family="Segoe UI, Arial, sans-serif" font-size="14">Memory: 9.62 MB</text>
+</svg>

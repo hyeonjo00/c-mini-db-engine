@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>MiniDB Studio Algorithm Whitepaper (English)</title>
+            <style>
+            :root {
+    --bg: #111827;
+    --panel: #1f2937;
+    --panel-soft: rgba(31, 41, 55, 0.88);
+    --border: #374151;
+    --accent: #60a5fa;
+    --accent-soft: rgba(96, 165, 250, 0.12);
+    --text: #f9fafb;
+    --muted: #9ca3af;
+    --shadow: 0 18px 44px rgba(0, 0, 0, 0.26);
+    --radius-xl: 30px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --page-width: 1180px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    background: var(--bg);
+    color: var(--text);
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    color: var(--text);
+    background:
+        radial-gradient(circle at top right, rgba(96, 165, 250, 0.10), transparent 32%),
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.03), transparent 22%),
+        var(--bg);
+    font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.66;
+    letter-spacing: -0.01em;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+body.lang-ko {
+    font-family: "Noto Sans KR", "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+    line-height: 1.86;
+    word-break: keep-all;
+}
+
+img, svg {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+main.paper {
+    width: min(100%, var(--page-width));
+    margin: 0 auto;
+    padding: 42px 34px 56px;
+}
+
+.page {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(31, 41, 55, 0.96), rgba(17, 24, 39, 0.96));
+    box-shadow: var(--shadow);
+    padding: 34px;
+    margin-bottom: 28px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.page.break {
+    break-before: page;
+    page-break-before: always;
+}
+
+.page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.06), transparent 34%);
+}
+
+.cover {
+    min-height: 900px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cover-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 24px;
+    align-items: stretch;
+}
+
+.hero-block {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(96, 165, 250, 0.28);
+    background: rgba(96, 165, 250, 0.10);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+body.lang-ko .eyebrow {
+    letter-spacing: 0.06em;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+    margin: 0;
+}
+
+.title {
+    font-size: 54px;
+    line-height: 1.02;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.subtitle {
+    font-size: 22px;
+    color: var(--muted);
+    line-height: 1.5;
+    max-width: 680px;
+}
+
+.hero-copy {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 640px;
+}
+
+body.lang-ko .title {
+    font-size: 48px;
+    line-height: 1.18;
+}
+
+body.lang-ko .subtitle {
+    line-height: 1.72;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.chip::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--accent);
+    opacity: 0.9;
+}
+
+.hero-metrics,
+.meta-grid,
+.grid-2,
+.grid-3,
+.roadmap {
+    display: grid;
+    gap: 16px;
+}
+
+.hero-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.meta-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 18px;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.roadmap {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card,
+.metric,
+.meta,
+.horizon {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: rgba(15, 23, 42, 0.45);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::after,
+.metric::after,
+.meta::after,
+.horizon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 34%);
+}
+
+.metric {
+    padding: 18px 20px;
+}
+
+.metric-label,
+.meta-label,
+.kicker,
+.section-index,
+.table caption,
+.small-label {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.lang-ko .metric-label,
+body.lang-ko .meta-label,
+body.lang-ko .kicker,
+body.lang-ko .section-index,
+body.lang-ko .table caption,
+body.lang-ko .small-label {
+    letter-spacing: 0.03em;
+}
+
+.metric-value,
+.mono {
+    font-family: "JetBrains Mono", "Consolas", "SFMono-Regular", monospace;
+}
+
+.metric-value {
+    font-size: 24px;
+    line-height: 1.15;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.meta-value {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+}
+
+.section-head-main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 780px;
+}
+
+.section-index {
+    color: var(--accent);
+}
+
+.section-title {
+    font-size: 31px;
+    line-height: 1.12;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+}
+
+.section-lead {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.72;
+}
+
+body.lang-ko .section-title {
+    line-height: 1.28;
+}
+
+body.lang-ko .section-lead {
+    line-height: 1.88;
+}
+
+.card-title {
+    font-size: 18px;
+    line-height: 1.3;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.card-copy,
+.card p,
+.card li,
+.meta p,
+.horizon p {
+    color: #d6dbe6;
+    font-size: 14px;
+    line-height: 1.72;
+}
+
+body.lang-ko .card-copy,
+body.lang-ko .card p,
+body.lang-ko .card li,
+body.lang-ko .meta p,
+body.lang-ko .horizon p {
+    line-height: 1.9;
+}
+
+.bullet-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+}
+
+.bullet-list li {
+    position: relative;
+    padding-left: 18px;
+}
+
+.bullet-list li::before {
+    content: "";
+    position: absolute;
+    top: 0.72em;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--accent);
+}
+
+.note {
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(96, 165, 250, 0.24);
+    background: rgba(96, 165, 250, 0.10);
+    color: #dce9ff;
+    font-size: 14px;
+    line-height: 1.72;
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: rgba(15, 23, 42, 0.44);
+}
+
+.table th,
+.table td {
+    padding: 13px 14px;
+    text-align: left;
+    vertical-align: top;
+    font-size: 13px;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(55, 65, 81, 0.62);
+}
+
+.table th {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.table tr:last-child td {
+    border-bottom: 0;
+}
+
+.table td.mono,
+.table th.mono {
+    font-family: "JetBrains Mono", "Consolas", "SFMono-Regular", monospace;
+}
+
+.figure {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.diagram-frame {
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    background: rgba(15, 23, 42, 0.58);
+    padding: 18px;
+}
+
+.figure-caption {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.64;
+}
+
+.code-inline {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: "JetBrains Mono", "Consolas", "SFMono-Regular", monospace;
+    font-size: 12px;
+    color: #dbeafe;
+    white-space: nowrap;
+}
+
+.quote-card {
+    background: linear-gradient(180deg, rgba(96, 165, 250, 0.10), rgba(15, 23, 42, 0.22));
+}
+
+.horizon-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.footer-summary {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 16px;
+}
+
+.cover-visual {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cover-card {
+    border-radius: 28px;
+    border: 1px solid rgba(96, 165, 250, 0.22);
+    background: linear-gradient(180deg, rgba(96, 165, 250, 0.12), rgba(15, 23, 42, 0.60));
+    padding: 22px;
+}
+
+.cover-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.cover-card-copy {
+    color: #d6dbe6;
+    font-size: 14px;
+    line-height: 1.72;
+}
+
+.timeline {
+    display: grid;
+    gap: 14px;
+}
+
+.timeline-row {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(55, 65, 81, 0.62);
+}
+
+.timeline-row:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.timeline-tag {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+svg .frame {
+    fill: rgba(17, 24, 39, 0.88);
+    stroke: #374151;
+    stroke-width: 1.4;
+}
+
+svg .frame-soft {
+    fill: rgba(255, 255, 255, 0.03);
+    stroke: #374151;
+    stroke-width: 1.2;
+}
+
+svg .accent-fill {
+    fill: rgba(96, 165, 250, 0.16);
+    stroke: #60a5fa;
+    stroke-width: 1.5;
+}
+
+svg .accent-stroke {
+    stroke: #60a5fa;
+    stroke-width: 2;
+    fill: none;
+}
+
+svg .muted-stroke {
+    stroke: #64748b;
+    stroke-width: 1.8;
+    fill: none;
+}
+
+svg .text {
+    fill: #f9fafb;
+    font-size: 16px;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+body.lang-ko svg .text {
+    font-family: "Noto Sans KR", "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+
+svg .text-muted {
+    fill: #9ca3af;
+    font-size: 13px;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+body.lang-ko svg .text-muted {
+    font-family: "Noto Sans KR", "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+
+svg .text-strong {
+    fill: #f9fafb;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+svg .text-small {
+    fill: #9ca3af;
+    font-size: 12px;
+}
+
+svg .dot {
+    fill: #60a5fa;
+}
+
+@page {
+    size: A4;
+    margin: 16mm 14mm 16mm;
+}
+
+@media print {
+    body {
+        background: var(--bg);
+    }
+
+    main.paper {
+        width: auto;
+        padding: 0;
+    }
+
+    .page {
+        margin-bottom: 10mm;
+        box-shadow: none;
+    }
+}
+            </style>
+        </head>
+        <body class="">
+            <main class="paper">
+                <section class="page cover">
+        <div class="cover-grid">
+            <div class="hero-block">
+                <div class="eyebrow">Algorithm Whitepaper</div>
+                <h1 class="title">MiniDB Studio</h1>
+                <p class="subtitle">A bilingual storage-engine and desktop database studio whitepaper for a pure C core, rule-based query planning, B+ Tree traversal, WAL recovery, and state-driven desktop observability.</p>
+                <p class="hero-copy">This package documents the current architecture of MiniDB Studio as it exists in the codebase today: reusable engine modules, index-aware query execution, deterministic assistant suggestions, and raylib-based desktop synchronization on top of the same executor boundary.</p>
+                <div class="chips"><span class="chip">Pure C11 Core</span><span class="chip">Hash Index</span><span class="chip">B+ Tree</span><span class="chip">CSV Snapshot</span><span class="chip">WAL Replay</span><span class="chip">raylib Desktop</span></div>
+                <div class="hero-metrics"><div class="metric"><div class="metric-label">Engine Boundary</div><div class="metric-value">Reusable</div></div><div class="metric"><div class="metric-label">Index Paths</div><div class="metric-value">3</div></div><div class="metric"><div class="metric-label">Recovery Model</div><div class="metric-value">CSV + WAL</div></div><div class="metric"><div class="metric-label">Document Set</div><div class="metric-value">EN + KO</div></div></div>
+            </div>
+            <div class="cover-visual">
+                <div class="cover-card">
+                    <div class="cover-card-title">Architecture Snapshot</div>
+                    <div class="cover-card-copy">A shared execution core keeps query semantics, recovery rules, and telemetry consistent across terminal and desktop surfaces.</div>
+                </div>
+                <div class="diagram-frame">
+
+<svg viewBox="0 0 520 420" role="img" aria-label="MiniDB Studio cover architecture stack">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="18" y="18" width="484" height="384" rx="32" class="frame-soft"></rect>
+    <rect x="62" y="52" width="396" height="78" rx="18" class="accent-fill"></rect><text x="80" y="82" class="text text-strong" text-anchor="start">Desktop Studio Shell</text><text x="80" y="108" class="text-muted" text-anchor="start">raylib panels<tspan x="80" dy="17">query editor</tspan><tspan x="80" dy="17">result grid</tspan></text>
+    <rect x="62" y="154" width="396" height="78" rx="18" class="frame"></rect><text x="80" y="184" class="text text-strong" text-anchor="start">Shared Executor Boundary</text><text x="80" y="210" class="text-muted" text-anchor="start">parser<tspan x="80" dy="17">planner</tspan><tspan x="80" dy="17">CRUD dispatch</tspan></text>
+    <rect x="62" y="256" width="186" height="98" rx="18" class="frame"></rect><text x="80" y="286" class="text text-strong" text-anchor="start">Hash + WAL</text><text x="80" y="312" class="text-muted" text-anchor="start">exact match<tspan x="80" dy="17">append log</tspan></text>
+    <rect x="272" y="256" width="186" height="98" rx="18" class="accent-fill"></rect><text x="290" y="286" class="text text-strong" text-anchor="start">B+ Tree + Metrics</text><text x="290" y="312" class="text-muted" text-anchor="start">range scan<tspan x="290" dy="17">ordered traversal</tspan></text>
+    <line x1="260" y1="130" x2="260" y2="154" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="156" y1="232" x2="156" y2="256" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="364" y1="232" x2="364" y2="256" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <text x="62" y="386" class="text-muted" text-anchor="start">One code path, two user surfaces: terminal + desktop.</text>
+</svg>
+
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="meta-grid"><div class="meta"><div class="meta-label">Audience</div><div class="meta-value">Engineering portfolio reviewers, interviewers, and systems-programming peers.</div></div><div class="meta"><div class="meta-label">Scope</div><div class="meta-value">Parser, planner, execution engine, recovery, desktop synchronization, and performance telemetry.</div></div><div class="meta"><div class="meta-label">Positioning</div><div class="meta-value">A lightweight database management studio with explainable internals and demo-ready visuals.</div></div></div>
+        </div>
+    </section>
+                <section class="page break">
+    <header class="section-head">
+        <div class="section-head-main">
+            <div class="section-index">Section 02</div>
+            <h2 class="section-title">Project Overview</h2>
+            <p class="section-lead">MiniDB Studio combines an in-memory record engine, rule-based optimizer, and desktop control surface without splitting the storage core from the UI shell. The result is a portfolio project that behaves like a miniature database studio rather than a parser demo.</p>
+        </div>
+    </header>
+    <div class="grid-2"><article class="card"><h3 class="card-title">System Scope</h3><ul class="bullet-list"><li>A <span class="code-inline">C11</span> storage core owns records, indexes, recovery state, and execution statistics.</li><li>Both the terminal console and the raylib desktop app reuse the same <span class="code-inline">parse -> plan -> execute</span> boundary.</li><li>Exact lookups are accelerated through hash indexes, while ordered access and range scans flow through B+ Trees.</li><li>Persistence is modeled as snapshot + log replay, which makes recovery explainable in a short interview walkthrough.</li></ul></article><article class="card"><h3 class="card-title">Module Inventory</h3><table class="table"><thead><tr><th>Module</th><th>Primary responsibility</th><th>Representative symbols</th></tr></thead><tbody><tr><td><span class="mono">parser.c</span></td><td>Tokenization, validation, and command decoding.</td><td><span class="mono">parse_select</span>, <span class="mono">parse_update</span></td></tr><tr><td><span class="mono">planner.c</span></td><td>Rule-based access-path selection and sort pushdown checks.</td><td><span class="mono">planner_choose_plan</span></td></tr><tr><td><span class="mono">database.c</span></td><td>CRUD dispatch, filter evaluation, index maintenance, and query statistics.</td><td><span class="mono">database_select</span>, <span class="mono">database_estimate_memory_usage</span></td></tr><tr><td><span class="mono">bptree.c</span></td><td>Ordered access and range traversal.</td><td><span class="mono">bptree_insert</span>, <span class="mono">bptree_collect_stats</span></td></tr><tr><td><span class="mono">wal.c</span></td><td>Append-only mutation logging and replay.</td><td><span class="mono">wal_append_insert</span>, <span class="mono">wal_replay</span></td></tr><tr><td><span class="mono">studio_app.c</span></td><td>Desktop state transitions and metric streaming.</td><td><span class="mono">studio_execute_text</span>, <span class="mono">studio_push_metrics</span></td></tr></tbody></table></article></div>
+</section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">Section 03</div>
+                <h2 class="section-title">Core Storage Engine Architecture</h2>
+                <p class="section-lead">The most important design choice is ownership isolation. Record lifetime stays inside <span class="code-inline">Database</span>, secondary indexes only borrow <span class="code-inline">Record*</span> references, and UI-facing summaries materialize temporary result rows so the desktop layer never becomes the owner of storage memory.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Execution Layers</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 470" role="img" aria-label="Core architecture layers">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="16" y="18" width="948" height="434" rx="26" class="frame-soft"></rect>
+    <rect x="56" y="64" width="180" height="96" rx="18" class="accent-fill"></rect><text x="74" y="94" class="text text-strong" text-anchor="start">Desktop + Terminal</text><text x="74" y="120" class="text-muted" text-anchor="start">raylib Studio<tspan x="74" dy="17">CLI shell</tspan></text>
+    <rect x="292" y="64" width="182" height="96" rx="18" class="frame"></rect><text x="310" y="94" class="text text-strong" text-anchor="start">AppContext</text><text x="310" y="120" class="text-muted" text-anchor="start">history<tspan x="310" dy="17">logger</tspan><tspan x="310" dy="17">cache</tspan></text>
+    <rect x="530" y="64" width="182" height="96" rx="18" class="frame"></rect><text x="548" y="94" class="text text-strong" text-anchor="start">Parser + Planner</text><text x="548" y="120" class="text-muted" text-anchor="start">tokenize<tspan x="548" dy="17">predicate decode</tspan><tspan x="548" dy="17">access path</tspan></text>
+    <rect x="768" y="64" width="156" height="96" rx="18" class="accent-fill"></rect><text x="786" y="94" class="text text-strong" text-anchor="start">Database</text><text x="786" y="120" class="text-muted" text-anchor="start">records<tspan x="786" dy="17">filters</tspan><tspan x="786" dy="17">stats</tspan></text>
+
+    <line x1="236" y1="112" x2="292" y2="112" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="474" y1="112" x2="530" y2="112" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="712" y1="112" x2="768" y2="112" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+
+    <rect x="120" y="264" width="178" height="96" rx="18" class="frame"></rect><text x="138" y="294" class="text text-strong" text-anchor="start">Hash Index</text><text x="138" y="320" class="text-muted" text-anchor="start">id<tspan x="138" dy="17">department</tspan></text>
+    <rect x="402" y="246" width="198" height="116" rx="18" class="accent-fill"></rect><text x="420" y="276" class="text text-strong" text-anchor="start">Ordered Index Layer</text><text x="420" y="302" class="text-muted" text-anchor="start">B+ Tree(id)<tspan x="420" dy="17">B+ Tree(age)</tspan><tspan x="420" dy="17">range scan</tspan><tspan x="420" dy="17">ORDER BY age</tspan></text>
+    <rect x="692" y="246" width="118" height="116" rx="18" class="frame"></rect><text x="710" y="276" class="text text-strong" text-anchor="start">CSV Snapshot</text><text x="710" y="302" class="text-muted" text-anchor="start">SAVE<tspan x="710" dy="17">LOAD</tspan></text>
+    <rect x="826" y="246" width="98" height="116" rx="18" class="frame"></rect><text x="844" y="276" class="text text-strong" text-anchor="start">WAL</text><text x="844" y="302" class="text-muted" text-anchor="start">INSERT<tspan x="844" dy="17">UPDATE</tspan><tspan x="844" dy="17">DELETE</tspan></text>
+
+    <line x1="846" y1="160" x2="846" y2="246" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="812" y1="160" x2="812" y2="246" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="790" y1="160" x2="501" y2="246" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="790" y1="160" x2="209" y2="264" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+
+    <text x="56" y="220" class="text text-strong" text-anchor="start">Shared engine boundary</text>
+    <text x="56" y="244" class="text-muted" text-anchor="start">UI surfaces remain callers; the engine keeps mutation and ownership rules.</text>
+</svg>
+</div><p class="figure-caption">The same execution path serves the terminal and the desktop studio. That separation preserves the pure C engine while allowing new presentation layers.</p></div></article><article class="card"><h3 class="card-title">Memory Ownership Model</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 340" role="img" aria-label="Memory ownership model">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="42" y="42" width="180" height="96" rx="18" class="accent-fill"></rect><text x="60" y="72" class="text text-strong" text-anchor="start">Database</text><text x="60" y="98" class="text-muted" text-anchor="start">owns record lifetime<tspan x="60" dy="17">destroys indexes on exit</tspan></text>
+    <rect x="282" y="42" width="176" height="96" rx="18" class="frame"></rect><text x="300" y="72" class="text text-strong" text-anchor="start">Record nodes</text><text x="300" y="98" class="text-muted" text-anchor="start">id, name, age, department<tspan x="300" dy="17">single source of truth</tspan></text>
+    <rect x="534" y="30" width="176" height="108" rx="18" class="frame"></rect><text x="552" y="60" class="text text-strong" text-anchor="start">Hash buckets</text><text x="552" y="86" class="text-muted" text-anchor="start">borrow Record*<tspan x="552" dy="17">never free records</tspan></text>
+    <rect x="762" y="30" width="176" height="108" rx="18" class="frame"></rect><text x="780" y="60" class="text text-strong" text-anchor="start">B+ Tree value lists</text><text x="780" y="86" class="text-muted" text-anchor="start">borrow Record*<tspan x="780" dy="17">leaf-level fan-out</tspan></text>
+
+    <rect x="282" y="202" width="196" height="102" rx="18" class="frame"></rect><text x="300" y="232" class="text text-strong" text-anchor="start">CommandExecutionSummary</text><text x="300" y="258" class="text-muted" text-anchor="start">owns temporary<tspan x="300" dy="17">query result materialization</tspan></text>
+    <rect x="560" y="202" width="176" height="102" rx="18" class="frame"></rect><text x="578" y="232" class="text text-strong" text-anchor="start">QueryResult rows[]</text><text x="578" y="258" class="text-muted" text-anchor="start">UI-safe copies<tspan x="578" dy="17">cacheable summary payload</tspan></text>
+    <rect x="790" y="202" width="148" height="102" rx="18" class="frame"></rect><text x="808" y="232" class="text text-strong" text-anchor="start">Studio UI</text><text x="808" y="258" class="text-muted" text-anchor="start">reads only<tspan x="808" dy="17">selection + sort state</tspan></text>
+
+    <line x1="222" y1="90" x2="282" y2="90" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="458" y1="90" x2="534" y2="90" class="muted-stroke" marker-end="url(#arrow-muted)" stroke-dasharray="6 6"></line>
+    <line x1="458" y1="90" x2="762" y2="90" class="muted-stroke" marker-end="url(#arrow-muted)" stroke-dasharray="6 6"></line>
+    <line x1="380" y1="138" x2="380" y2="202" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="478" y1="252" x2="560" y2="252" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="736" y1="252" x2="790" y2="252" class="muted-stroke" marker-end="url(#arrow-muted)" stroke-dasharray="6 6"></line>
+
+    <text x="534" y="164" class="text-muted" text-anchor="start">Dashed arrows = borrowed references</text>
+    <text x="282" y="164" class="text-muted" text-anchor="start">Solid arrows = owning lifetime</text>
+</svg>
+</div><p class="figure-caption">This ownership split is what makes LOAD safe: a temporary database can be built, validated, and only then swapped into <span class="code-inline">AppContext</span>.</p></div><div class="note">Design invariant: mutation paths update indexes and persistence metadata inside the engine before UI code reads the new state. The raylib layer never frees storage objects directly.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">Section 04</div>
+                <h2 class="section-title">Query Planner &amp; Optimizer Algorithm</h2>
+                <p class="section-lead">The optimizer is intentionally lightweight and explainable. It does not rely on a cost model; instead, it applies deterministic rules that map query shape to the best available access path, then annotates the UI with the chosen plan string.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Planner Decision Flow</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 420" role="img" aria-label="Planner flowchart">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="72" y="54" width="184" height="96" rx="18" class="accent-fill"></rect><text x="90" y="84" class="text text-strong" text-anchor="start">Parsed SELECT</text><text x="90" y="110" class="text-muted" text-anchor="start">predicates<tspan x="90" dy="17">ORDER BY</tspan><tspan x="90" dy="17">LIMIT</tspan></text>
+    <rect x="356" y="38" width="248" height="122" rx="18" class="frame"></rect><text x="374" y="68" class="text text-strong" text-anchor="start">Exact indexed predicate?</text><text x="374" y="94" class="text-muted" text-anchor="start">id = x<tspan x="374" dy="17">department = x</tspan><tspan x="374" dy="17">single-key equality</tspan></text>
+    <rect x="704" y="38" width="192" height="122" rx="18" class="accent-fill"></rect><text x="722" y="68" class="text text-strong" text-anchor="start">Hash Exact Lookup</text><text x="722" y="94" class="text-muted" text-anchor="start">lowest-latency<tspan x="722" dy="17">exact match path</tspan></text>
+    <rect x="356" y="214" width="248" height="122" rx="18" class="frame"></rect><text x="374" y="244" class="text text-strong" text-anchor="start">Range or ordered age path?</text><text x="374" y="270" class="text-muted" text-anchor="start">age &gt; x<tspan x="374" dy="17">age &gt;= x</tspan><tspan x="374" dy="17">ORDER BY age LIMIT k</tspan></text>
+    <rect x="704" y="214" width="192" height="122" rx="18" class="accent-fill"></rect><text x="722" y="244" class="text text-strong" text-anchor="start">B+ Tree Range Scan</text><text x="722" y="270" class="text-muted" text-anchor="start">ordered leaf walk<tspan x="722" dy="17">limit pushdown</tspan></text>
+    <rect x="72" y="250" width="184" height="86" rx="18" class="frame"></rect><text x="90" y="280" class="text text-strong" text-anchor="start">Full Scan</text><text x="90" y="306" class="text-muted" text-anchor="start">predicate filter<tspan x="90" dy="17">optional in-memory sort</tspan></text>
+
+    <line x1="256" y1="102" x2="356" y2="102" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="604" y1="102" x2="704" y2="102" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="480" y1="160" x2="480" y2="214" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="604" y1="274" x2="704" y2="274" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="356" y1="274" x2="256" y2="294" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+
+    <text x="320" y="86" class="text-muted" text-anchor="start">yes</text>
+    <text x="486" y="188" class="text-muted" text-anchor="start">no<tspan x="486" dy="18">or OR-path needs fallback filtering</tspan></text>
+    <text x="300" y="292" class="text-muted" text-anchor="start">fallback if no suitable index is available</text>
+</svg>
+</div><p class="figure-caption">The planner emits plan labels such as <span class="code-inline">B+ Tree Range Scan</span> or <span class="code-inline">Hash Exact Lookup</span>, which are surfaced directly in the desktop inspector.</p></div></article><article class="card"><h3 class="card-title">Rule Set and Planner Effects</h3><table class="table"><thead><tr><th>Query shape</th><th>Primary plan</th><th>Planner side effect</th></tr></thead><tbody><tr><td><span class="mono">SELECT WHERE id = 42</span></td><td>Hash exact lookup or B+ exact lookup</td><td>Scans a single bucket or key slot and reports a low row scan count.</td></tr><tr><td><span class="mono">SELECT WHERE department = Oncology</span></td><td>Hash exact lookup</td><td>Uses the department hash index and filters only the candidate chain.</td></tr><tr><td><span class="mono">SELECT WHERE age &gt; 30</span></td><td>B+ Tree range scan</td><td>Starts at the first qualifying leaf and walks the linked leaf chain.</td></tr><tr><td><span class="mono">SELECT ORDER BY age LIMIT 10</span></td><td>B+ Tree ordered scan</td><td>Suppresses extra sort work when the ordered leaf stream already matches the requested ordering.</td></tr><tr><td>Mixed <span class="mono">AND</span> predicate</td><td>Indexed seed + post-filter</td><td>Uses the best seed path, then evaluates remaining predicates in memory.</td></tr><tr><td>Unsupported or broad <span class="mono">OR</span></td><td>Full scan</td><td>Falls back to a complete record walk so correctness is preserved.</td></tr></tbody></table><div class="note">The planner also decides whether a later in-memory sort is still required. If leaf traversal already provides the requested <span class="code-inline">ORDER BY age</span>, the engine avoids extra reorder work.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">Section 05</div>
+                <h2 class="section-title">B+ Tree Traversal Logic</h2>
+                <p class="section-lead">The ordered index layer exists to make age-based range scans and ordered traversal feel like storage-engine work rather than linear filtering. The tree keeps all records in leaves, stores separator keys in internal nodes, and links leaves through a forward chain for fast sequential access.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Split and Range Path</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 460" role="img" aria-label="B+ Tree split and range traversal">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="380" y="36" width="220" height="88" rx="18" class="accent-fill"></rect><text x="398" y="66" class="text text-strong" text-anchor="start">Internal node</text><text x="398" y="92" class="text-muted" text-anchor="start">separator keys route lookups<tspan x="398" dy="17">records stay in leaves</tspan></text>
+    <rect x="114" y="178" width="216" height="104" rx="18" class="frame"></rect><text x="132" y="208" class="text text-strong" text-anchor="start">Leaf A</text><text x="132" y="234" class="text-muted" text-anchor="start">22, 24, 27<tspan x="132" dy="17">before split</tspan></text>
+    <rect x="382" y="178" width="216" height="104" rx="18" class="accent-fill"></rect><text x="400" y="208" class="text text-strong" text-anchor="start">Leaf B</text><text x="400" y="234" class="text-muted" text-anchor="start">31, 34<tspan x="400" dy="17">first qualifying leaf</tspan></text>
+    <rect x="650" y="178" width="216" height="104" rx="18" class="frame"></rect><text x="668" y="208" class="text text-strong" text-anchor="start">Leaf C</text><text x="668" y="234" class="text-muted" text-anchor="start">38, 42, 47<tspan x="668" dy="17">linked by next</tspan></text>
+    <rect x="382" y="330" width="244" height="92" rx="18" class="frame"></rect><text x="400" y="360" class="text text-strong" text-anchor="start">Range scan</text><text x="400" y="386" class="text-muted" text-anchor="start">seek first age &gt;= 31<tspan x="400" dy="17">walk leaf-&gt;next until stop</tspan></text>
+
+    <line x1="468" y1="124" x2="222" y2="178" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="490" y1="124" x2="490" y2="178" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="512" y1="124" x2="758" y2="178" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="598" y1="228" x2="650" y2="228" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="330" y1="228" x2="382" y2="228" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="490" y1="282" x2="490" y2="330" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+
+    <circle cx="438" cy="228" r="8" class="dot"></circle>
+    <circle cx="706" cy="228" r="8" class="dot"></circle>
+    <text x="146" y="306" class="text-muted" text-anchor="start">Temporary m+1 array</text>
+    <text x="392" y="316" class="text-muted" text-anchor="start">Promote first key of right leaf</text>
+    <text x="674" y="306" class="text-muted" text-anchor="start">Leaf chain supports ordered traversal</text>
+</svg>
+</div><p class="figure-caption">The current implementation comments the split logic directly in <span class="code-inline">bptree.c</span> so leaf and internal promotion rules are visible to reviewers.</p></div></article><article class="card"><h3 class="card-title">Operational Semantics</h3><ul class="bullet-list"><li><span class="code-inline">bptree_insert</span> descends to the correct leaf, inserts in sorted order, and bubbles a split upward only when a node overflows.</li><li>Leaf split logic uses a temporary array with one extra slot, keeps the lower half in place, moves the upper half into a new right sibling, and promotes the first key of that right sibling.</li><li>Internal split logic promotes the middle separator upward while redistributing children so parent routing stays correct after the split.</li><li>Non-unique age keys are stored as value lists attached to a single leaf key, which keeps duplicate ages ordered without duplicating separators.</li><li>Deletion uses borrow-or-merge rebalancing helpers so underflowing nodes repair themselves before the tree returns control to the caller.</li></ul><table class="table"><thead><tr><th>Operation</th><th class="mono">Typical complexity</th><th>Notes</th></tr></thead><tbody><tr><td>Exact lookup</td><td class="mono"><span class="mono">O(log_B n)</span></td><td>Descend through separators to one leaf.</td></tr><tr><td>Range scan</td><td class="mono"><span class="mono">O(log_B n + k)</span></td><td>Seek once, then stream through leaf links.</td></tr><tr><td>Insert</td><td class="mono"><span class="mono">O(log_B n)</span></td><td>Split only on overflowing nodes.</td></tr><tr><td>Delete</td><td class="mono"><span class="mono">O(log_B n)</span></td><td>Borrow/merge on underflow.</td></tr></tbody></table></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">Section 06</div>
+                <h2 class="section-title">WAL and Snapshot Recovery Flow</h2>
+                <p class="section-lead">Persistence is modeled as a checkpointable snapshot plus an append-only mutation log. This keeps on-disk behavior easy to reason about: SAVE emits a stable CSV image, and startup recovery replays any later mutations from the WAL.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Recovery Sequence</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 380" role="img" aria-label="Snapshot and WAL recovery flow">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="56" y="134" width="154" height="92" rx="18" class="accent-fill"></rect><text x="74" y="164" class="text text-strong" text-anchor="start">LOAD command</text><text x="74" y="190" class="text-muted" text-anchor="start">create temporary database</text>
+    <rect x="264" y="134" width="176" height="92" rx="18" class="frame"></rect><text x="282" y="164" class="text text-strong" text-anchor="start">CSV snapshot</text><text x="282" y="190" class="text-muted" text-anchor="start">persistence_load_csv</text>
+    <rect x="494" y="134" width="176" height="92" rx="18" class="accent-fill"></rect><text x="512" y="164" class="text text-strong" text-anchor="start">WAL replay</text><text x="512" y="190" class="text-muted" text-anchor="start">wal_replay<tspan x="512" dy="17">INSERT | UPDATE | DELETE</tspan></text>
+    <rect x="724" y="134" width="194" height="92" rx="18" class="frame"></rect><text x="742" y="164" class="text text-strong" text-anchor="start">Swap live state</text><text x="742" y="190" class="text-muted" text-anchor="start">replace AppContext database<tspan x="742" dy="17">refresh status + memory</tspan></text>
+
+    <rect x="264" y="40" width="176" height="64" rx="18" class="frame"></rect><text x="282" y="70" class="text text-strong" text-anchor="start">SAVE command</text><text x="282" y="96" class="text-muted" text-anchor="start">persistence_save_csv</text>
+    <rect x="494" y="40" width="176" height="64" rx="18" class="frame"></rect><text x="512" y="70" class="text text-strong" text-anchor="start">Checkpoint WAL</text><text x="512" y="96" class="text-muted" text-anchor="start">truncate log after durable snapshot</text>
+
+    <line x1="210" y1="180" x2="264" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="440" y1="180" x2="494" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="670" y1="180" x2="724" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="352" y1="104" x2="352" y2="134" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="582" y1="104" x2="582" y2="134" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <text x="724" y="244" class="text-muted" text-anchor="start">Live state is replaced only after the temporary restore succeeds end-to-end.</text>
+</svg>
+</div><p class="figure-caption">The executor loads into a temporary <span class="code-inline">Database</span>, replays <span class="code-inline">data/db.log</span>, and only then swaps the restored engine into the active context.</p></div></article><article class="card"><h3 class="card-title">Recovery Guarantees</h3><table class="table"><thead><tr><th>Phase</th><th>Current algorithm</th><th>Why it matters</th></tr></thead><tbody><tr><td>Mutation logging</td><td>Append <span class="mono">INSERT|...</span>, <span class="mono">UPDATE|...</span>, or <span class="mono">DELETE|...</span> records.</td><td>Every change after the last snapshot has a replayable representation.</td></tr><tr><td>Snapshot save</td><td>Write all rows to CSV, then checkpoint the WAL.</td><td>The CSV becomes a concise restore point and the log stays bounded.</td></tr><tr><td>Restore</td><td>Load CSV into a temporary engine, replay WAL, rebuild indexes as records are inserted.</td><td>Indexes and row store are restored through the same code paths used in normal execution.</td></tr><tr><td>Activation</td><td>Assign the restored database into <span class="mono">AppContext</span> only after success.</td><td>Prevents partial recovery from corrupting the active session.</td></tr></tbody></table><div class="note">Because replay calls the normal database mutation APIs, index consistency is not a separate recovery step; it is a side effect of reusing the same insert/update/delete logic.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">Section 07</div>
+                <h2 class="section-title">AI Query Assistant Parsing Flow</h2>
+                <p class="section-lead">The current desktop assistant is intentionally deterministic. It is not an LLM runtime; instead, it synthesizes valid SQL-like suggestions from row context, prior execution plans, and canned demo heuristics, then routes those suggestions back through the same parser used for typed text.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Current Assistant Pipeline</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 390" role="img" aria-label="Assistant suggestion flow">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="44" y="54" width="182" height="98" rx="18" class="frame"></rect><text x="62" y="84" class="text text-strong" text-anchor="start">Selected row</text><text x="62" y="110" class="text-muted" text-anchor="start">id, department, age context</text>
+    <rect x="44" y="222" width="182" height="98" rx="18" class="frame"></rect><text x="62" y="252" class="text text-strong" text-anchor="start">Last plan feedback</text><text x="62" y="278" class="text-muted" text-anchor="start">full scan warning<tspan x="62" dy="17">index-aware hint</tspan></text>
+    <rect x="312" y="136" width="216" height="104" rx="18" class="accent-fill"></rect><text x="330" y="166" class="text text-strong" text-anchor="start">studio_build_assistant_content</text><text x="330" y="192" class="text-muted" text-anchor="start">compose valid query suggestions<tspan x="330" dy="17">preserve engine grammar</tspan></text>
+    <rect x="612" y="136" width="162" height="104" rx="18" class="frame"></rect><text x="630" y="166" class="text text-strong" text-anchor="start">SQL editor</text><text x="630" y="192" class="text-muted" text-anchor="start">insert suggestion<tspan x="630" dy="17">Ctrl+Enter execute</tspan></text>
+    <rect x="814" y="136" width="122" height="104" rx="18" class="frame"></rect><text x="832" y="166" class="text text-strong" text-anchor="start">Shared parser</text><text x="832" y="192" class="text-muted" text-anchor="start">normal parse/plan path</text>
+
+    <line x1="226" y1="104" x2="312" y2="168" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="226" y1="272" x2="312" y2="208" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="528" y1="188" x2="612" y2="188" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="774" y1="188" x2="814" y2="188" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <text x="612" y="256" class="text-muted" text-anchor="start">Suggested commands are first-class inputs, not a special execution path.</text>
+    <text x="44" y="344" class="text-muted" text-anchor="start">This keeps the assistant honest: every suggestion must compile under the same parser contract as manual queries.</text>
+</svg>
+</div><p class="figure-caption">Examples include <span class="code-inline">SELECT WHERE id = ...</span> and <span class="code-inline">SELECT WHERE age &gt; ... ORDER BY age LIMIT 10</span> when a row or plan indicates that the B+ Tree would be a good fit.</p></div></article><article class="card"><h3 class="card-title">Assistant Design Contract</h3><ul class="bullet-list"><li>Selected-row context seeds deterministic query templates that are guaranteed to be syntactically valid for the current grammar.</li><li>Recent execution plans bias suggestions toward indexed alternatives when a previous command triggered a full scan.</li><li>The editor remains the visible source of truth, so users can inspect or modify a generated command before execution.</li><li>Because assistant output flows back through <span class="code-inline">parse_command</span>, validation, logging, benchmarking, and caching all continue to work unchanged.</li></ul><div class="note">Future natural-language parsing belongs in the roadmap, not in the current-state architecture claim. The existing implementation already creates a useful “AI assistant” surface by turning engine state into context-aware query suggestions.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">Section 08</div>
+                <h2 class="section-title">Desktop UI-State Synchronization</h2>
+                <p class="section-lead">The desktop application stays responsive because UI state is thin and derived. Query execution mutates engine state inside <span class="code-inline">AppContext</span>, then the desktop layer consumes summarized outputs for the editor, grid, inspector, metrics dashboard, and footer.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">State Transition Graph</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 410" role="img" aria-label="Desktop UI synchronization flow">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="52" y="132" width="148" height="96" rx="18" class="frame"></rect><text x="70" y="162" class="text text-strong" text-anchor="start">User action</text><text x="70" y="188" class="text-muted" text-anchor="start">type, click, shortcut</text>
+    <rect x="244" y="132" width="198" height="96" rx="18" class="accent-fill"></rect><text x="262" y="162" class="text text-strong" text-anchor="start">studio_execute_text</text><text x="262" y="188" class="text-muted" text-anchor="start">run input<tspan x="262" dy="17">reset selection state</tspan></text>
+    <rect x="486" y="132" width="188" height="96" rx="18" class="frame"></rect><text x="504" y="162" class="text text-strong" text-anchor="start">app_context_run_input</text><text x="504" y="188" class="text-muted" text-anchor="start">parse<tspan x="504" dy="17">plan</tspan><tspan x="504" dy="17">execute</tspan><tspan x="504" dy="17">log</tspan></text>
+    <rect x="716" y="132" width="214" height="96" rx="18" class="frame"></rect><text x="734" y="162" class="text text-strong" text-anchor="start">CommandExecutionSummary</text><text x="734" y="188" class="text-muted" text-anchor="start">message<tspan x="734" dy="17">result rows</tspan><tspan x="734" dy="17">stats</tspan><tspan x="734" dy="17">plan</tspan></text>
+
+    <rect x="244" y="286" width="164" height="72" rx="18" class="frame"></rect><text x="262" y="316" class="text text-strong" text-anchor="start">Result grid</text><text x="262" y="342" class="text-muted" text-anchor="start">rows, sort, page</text>
+    <rect x="430" y="286" width="164" height="72" rx="18" class="frame"></rect><text x="448" y="316" class="text text-strong" text-anchor="start">Metric buffers</text><text x="448" y="342" class="text-muted" text-anchor="start">latency, scans, memory</text>
+    <rect x="616" y="286" width="164" height="72" rx="18" class="frame"></rect><text x="634" y="316" class="text text-strong" text-anchor="start">Inspector</text><text x="634" y="342" class="text-muted" text-anchor="start">plan, index, benchmark</text>
+    <rect x="802" y="286" width="128" height="72" rx="18" class="frame"></rect><text x="820" y="316" class="text text-strong" text-anchor="start">Status bar</text><text x="820" y="342" class="text-muted" text-anchor="start">records, storage, queries</text>
+
+    <line x1="200" y1="180" x2="244" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="442" y1="180" x2="486" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="674" y1="180" x2="716" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="335" y1="228" x2="326" y2="286" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="560" y1="228" x2="512" y2="286" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="790" y1="228" x2="698" y2="286" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="860" y1="228" x2="866" y2="286" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+</svg>
+</div><p class="figure-caption">The desktop shell does not rebuild storage views from scratch. Instead, it reacts to a compact execution summary and a snapshot of dashboard status from the engine.</p></div></article><article class="card"><h3 class="card-title">Synchronization Points</h3><table class="table"><thead><tr><th>UI event</th><th>Primary function</th><th>Resulting state change</th></tr></thead><tbody><tr><td>Execute query</td><td><span class="mono">studio_execute_text</span></td><td>Runs the command, refreshes the latest summary, and clears stale row-selection state.</td></tr><tr><td>Engine dispatch</td><td><span class="mono">app_context_run_input</span></td><td>Updates cache counters, history, logger, and summary payload in one boundary.</td></tr><tr><td>Metrics update</td><td><span class="mono">studio_push_metrics</span></td><td>Appends latency, rows scanned, memory usage, cache ratio, and chosen plan counters.</td></tr><tr><td>Grid sort</td><td><span class="mono">result_grid_sort</span></td><td>Reorders already-materialized result rows without mutating the underlying engine tables.</td></tr><tr><td>Footer refresh</td><td><span class="mono">app_context_snapshot_status</span></td><td>Updates record count, memory estimate, and session query totals.</td></tr></tbody></table><div class="note">This flow is why the studio can stay visually rich without turning into a second storage layer. The UI owns presentation state; the engine owns truth.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">Section 09</div>
+                <h2 class="section-title">Performance Dashboard Metrics</h2>
+                <p class="section-lead">MiniDB Studio exposes internal engine behavior as presentation-friendly telemetry. Each executed command updates a compact set of metric series so the desktop dashboard can explain not just results, but also the cost profile of how those results were produced.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Metric Data Flow</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 360" role="img" aria-label="Performance metric sparkline and usage chart">
+    <defs>
+        <linearGradient id="latency-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.45"></stop>
+            <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.02"></stop>
+        </linearGradient>
+    </defs>
+    <rect x="20" y="20" width="940" height="320" rx="24" class="frame-soft"></rect>
+    <text x="42" y="62" class="text text-strong">Latency trend</text>
+    <text x="516" y="62" class="text text-strong">Index usage frequency</text>
+
+    <polyline fill="url(#latency-fill)" stroke="none" points="46,208 98,188 150,206 202,148 254,162 306,114 358,126 410,92 462,116 462,252 46,252"></polyline>
+    <polyline fill="none" stroke="#60a5fa" stroke-width="3" points="46,208 98,188 150,206 202,148 254,162 306,114 358,126 410,92 462,116"></polyline>
+    <line x1="46" y1="252" x2="462" y2="252" stroke="#374151" stroke-width="1.4"></line>
+    <text x="46" y="278" class="text-small">Recent query sequence</text>
+
+    <rect x="530" y="212" width="72" height="40" rx="12" class="frame"></rect>
+    <rect x="626" y="172" width="72" height="80" rx="12" class="accent-fill"></rect>
+    <rect x="722" y="146" width="72" height="106" rx="12" class="frame"></rect>
+    <rect x="818" y="118" width="72" height="134" rx="12" class="frame"></rect>
+    <text x="548" y="278" class="text-small">Cache</text>
+    <text x="640" y="278" class="text-small">Hash</text>
+    <text x="732" y="278" class="text-small">B+</text>
+    <text x="824" y="278" class="text-small">Scan</text>
+    <text x="516" y="312" class="text-muted">Each execution updates latency, rows scanned, memory, cache ratio, and selected-plan counters.</text>
+</svg>
+</div><p class="figure-caption">The dashboard visualizes engine-side signals that already exist in execution summaries, so the desktop layer is reading metrics rather than inventing them.</p></div></article><article class="card"><h3 class="card-title">Metric Definitions</h3><table class="table"><thead><tr><th>Metric</th><th>Source field</th><th>Operational meaning</th></tr></thead><tbody><tr><td>Query latency trend</td><td><span class="mono">last_elapsed_ms</span></td><td>Wall-clock duration for the most recent command path.</td></tr><tr><td>Rows scanned</td><td><span class="mono">summary.stats.rows_scanned</span></td><td>How many records or index candidates were touched to answer the query.</td></tr><tr><td>Memory usage</td><td><span class="mono">database_estimate_memory_usage</span></td><td>Approximate live storage footprint across records, indexes, and B+ Tree value nodes.</td></tr><tr><td>Cache hit ratio</td><td><span class="mono">query_cache_hits / query_cache_lookups</span></td><td>How often repeatable commands are served from the session cache.</td></tr><tr><td>Index usage frequency</td><td>Plan counters keyed by chosen plan</td><td>How often hash, B+ Tree, cache, or full-scan paths are selected during the session.</td></tr></tbody></table><div class="note">The dashboard is intentionally lightweight: tiny chart buffers, no heavy telemetry subsystem, and all values derived from already-existing execution accounting.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">Section 10</div>
+                <h2 class="section-title">Complexity Analysis</h2>
+                <p class="section-lead">The engine is small enough to explain asymptotically, but rich enough to show real trade-offs between exact lookup structures, ordered traversals, and recovery work. The chart below uses relative bar lengths to show the operational cost profile reviewers should expect.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Relative Cost Profile</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 350" role="img" aria-label="Relative complexity chart">
+    <rect x="24" y="18" width="932" height="314" rx="24" class="frame-soft"></rect>
+    <text x="42" y="56" class="text text-strong">Relative operation cost</text>
+
+    <line x1="180" y1="84" x2="180" y2="286" stroke="#374151" stroke-width="1.2"></line>
+    <line x1="180" y1="286" x2="914" y2="286" stroke="#374151" stroke-width="1.2"></line>
+
+    <text x="42" y="110" class="text-small">Parse and tokenize</text>
+    <text x="42" y="152" class="text-small">Hash exact lookup</text>
+    <text x="42" y="194" class="text-small">B+ Tree exact lookup</text>
+    <text x="42" y="236" class="text-small">B+ Tree range scan</text>
+    <text x="42" y="278" class="text-small">Snapshot load + WAL replay</text>
+
+    <rect x="198" y="92" width="148" height="18" rx="9" class="frame"></rect>
+    <rect x="198" y="134" width="118" height="18" rx="9" class="accent-fill"></rect>
+    <rect x="198" y="176" width="202" height="18" rx="9" class="frame"></rect>
+    <rect x="198" y="218" width="248" height="18" rx="9" class="accent-fill"></rect>
+    <rect x="198" y="260" width="322" height="18" rx="9" class="frame"></rect>
+
+    <text x="544" y="106" class="text-small">O(L)</text>
+    <text x="544" y="148" class="text-small">Avg O(1), worst O(n)</text>
+    <text x="544" y="190" class="text-small">O(log_B n)</text>
+    <text x="544" y="232" class="text-small">O(log_B n + k)</text>
+    <text x="544" y="274" class="text-small">O(n) + O(m log_B n)</text>
+</svg>
+</div><p class="figure-caption">Range scans become attractive when result ordering matters, even if the point lookup case is faster in the hash index.</p></div></article><article class="card"><h3 class="card-title">Complexity Table</h3><table class="table"><thead><tr><th>Operation</th><th class="mono">Complexity</th><th>Why it matters</th></tr></thead><tbody><tr><td>Tokenize + parse</td><td class="mono"><span class="mono">O(L)</span></td><td>Linear in query text length; keeps the front end predictable.</td></tr><tr><td>Hash exact lookup</td><td class="mono"><span class="mono">O(1)</span> average</td><td>Best path for direct id or department equality filters.</td></tr><tr><td>B+ Tree exact lookup</td><td class="mono"><span class="mono">O(log_B n)</span></td><td>Stable ordered search with a small tree height.</td></tr><tr><td>B+ Tree range scan</td><td class="mono"><span class="mono">O(log_B n + k)</span></td><td>One seek followed by leaf-chain streaming.</td></tr><tr><td>Insert / delete with index maintenance</td><td class="mono"><span class="mono">O(log_B n)</span></td><td>Mutation cost is dominated by B+ Tree maintenance after record lookup/allocation.</td></tr><tr><td>Snapshot load</td><td class="mono"><span class="mono">O(n)</span></td><td>All rows are reconstructed through normal insert paths.</td></tr><tr><td>WAL replay</td><td class="mono"><span class="mono">O(m log_B n)</span></td><td>Recovery cost scales with replay length and index rebuild work.</td></tr><tr><td>Result-grid sort fallback</td><td class="mono"><span class="mono">O(r log r)</span></td><td>Used only when the planner cannot preserve the desired order natively.</td></tr></tbody></table></article></div>
+    </section><section class="page break">
+    <header class="section-head">
+        <div class="section-head-main">
+            <div class="section-index">Section 11</div>
+            <h2 class="section-title">Future Scaling Roadmap</h2>
+            <p class="section-lead">The current architecture is deliberately compact, but its seams already point toward larger storage-engine work. The roadmap below keeps the pure C core intact while extending it toward disk management, richer planning, and more capable assistant behavior.</p>
+        </div>
+    </header>
+    <div class="roadmap"><article class="horizon"><div class="small-label">Near-term</div><h3 class="horizon-title">Local engine depth</h3><p>Introduce slotted-page serialization, richer index statistics, and more selective predicate normalization while preserving the current in-memory API surface.</p></article><article class="horizon"><div class="small-label">Mid-term</div><h3 class="horizon-title">Storage realism</h3><p>Add a buffer-pool abstraction, asynchronous checkpointing, composite indexes, and more explicit recovery metadata so SAVE/LOAD can grow into page-oriented persistence.</p></article><article class="horizon"><div class="small-label">Long-term</div><h3 class="horizon-title">DB studio evolution</h3><p>Layer MVCC, a cost-based optimizer, and validated natural-language-to-query conversion on top of the existing parser boundary without rewriting the storage engine.</p></article><div class="card quote-card"><h3 class="card-title">Roadmap Principle</h3><p>Every next step should keep the current strength of the project intact: explainable internals, reusable boundaries, and a UI that visualizes real engine behavior instead of hiding it.</p></div>
+</section><section class="page break">
+    <header class="section-head">
+        <div class="section-head-main">
+            <div class="section-index">Section 12</div>
+            <h2 class="section-title">Final Engineering Summary</h2>
+            <p class="section-lead">MiniDB Studio succeeds as a portfolio system because the engine, optimizer, recovery path, and desktop shell tell one coherent story. It is small enough to present in a few minutes and deep enough to discuss indexing, ownership, and execution trade-offs with confidence.</p>
+        </div>
+    </header>
+    <div class="footer-summary"><article class="card"><h3 class="card-title">Why the design holds together</h3><div class="timeline"><div class="timeline-row"><div class="timeline-tag">Reusable core</div><div>The same parser, planner, and database code power both the console interface and the desktop studio, which makes the architecture feel intentional rather than forked.</div></div><div class="timeline-row"><div class="timeline-tag">Explainable performance</div><div>Hash lookups, B+ Tree traversals, scan counts, and cache hits all surface clearly enough to discuss the query path chosen for a single command.</div></div><div class="timeline-row"><div class="timeline-tag">Recovery clarity</div><div>CSV snapshots plus WAL replay create a clean mental model for durability, restore safety, and index reconstruction through normal mutation paths.</div></div></div></article><article class="card"><h3 class="card-title">Portfolio framing</h3><p class="card-copy">MiniDB Studio demonstrates the kind of engineering judgment interviewers look for in systems work: explicit ownership rules, data-structure-aware query planning, predictable recovery, and a presentation layer that makes low-level decisions easy to inspect.</p><div class="note">Three-minute pitch: pure C storage core, hash + B+ Tree indexing, WAL-backed recovery, shared executor boundary, and a desktop studio that visualizes query plans and runtime metrics.</div></article></div>
+</section>
+            </main>
+        </body>
+        </html>

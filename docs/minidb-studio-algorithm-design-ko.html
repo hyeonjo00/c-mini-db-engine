@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+        <html lang="ko">
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>MiniDB Studio 알고리즘 백서 (한국어)</title>
+            <style>
+            :root {
+    --bg: #111827;
+    --panel: #1f2937;
+    --panel-soft: rgba(31, 41, 55, 0.88);
+    --border: #374151;
+    --accent: #60a5fa;
+    --accent-soft: rgba(96, 165, 250, 0.12);
+    --text: #f9fafb;
+    --muted: #9ca3af;
+    --shadow: 0 18px 44px rgba(0, 0, 0, 0.26);
+    --radius-xl: 30px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --page-width: 1180px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    background: var(--bg);
+    color: var(--text);
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    color: var(--text);
+    background:
+        radial-gradient(circle at top right, rgba(96, 165, 250, 0.10), transparent 32%),
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.03), transparent 22%),
+        var(--bg);
+    font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.66;
+    letter-spacing: -0.01em;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+body.lang-ko {
+    font-family: "Noto Sans KR", "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+    line-height: 1.86;
+    word-break: keep-all;
+}
+
+img, svg {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+main.paper {
+    width: min(100%, var(--page-width));
+    margin: 0 auto;
+    padding: 42px 34px 56px;
+}
+
+.page {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(31, 41, 55, 0.96), rgba(17, 24, 39, 0.96));
+    box-shadow: var(--shadow);
+    padding: 34px;
+    margin-bottom: 28px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.page.break {
+    break-before: page;
+    page-break-before: always;
+}
+
+.page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.06), transparent 34%);
+}
+
+.cover {
+    min-height: 900px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cover-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 24px;
+    align-items: stretch;
+}
+
+.hero-block {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(96, 165, 250, 0.28);
+    background: rgba(96, 165, 250, 0.10);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+body.lang-ko .eyebrow {
+    letter-spacing: 0.06em;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+    margin: 0;
+}
+
+.title {
+    font-size: 54px;
+    line-height: 1.02;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.subtitle {
+    font-size: 22px;
+    color: var(--muted);
+    line-height: 1.5;
+    max-width: 680px;
+}
+
+.hero-copy {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 640px;
+}
+
+body.lang-ko .title {
+    font-size: 48px;
+    line-height: 1.18;
+}
+
+body.lang-ko .subtitle {
+    line-height: 1.72;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.chip::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--accent);
+    opacity: 0.9;
+}
+
+.hero-metrics,
+.meta-grid,
+.grid-2,
+.grid-3,
+.roadmap {
+    display: grid;
+    gap: 16px;
+}
+
+.hero-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.meta-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 18px;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.roadmap {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card,
+.metric,
+.meta,
+.horizon {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: rgba(15, 23, 42, 0.45);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::after,
+.metric::after,
+.meta::after,
+.horizon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 34%);
+}
+
+.metric {
+    padding: 18px 20px;
+}
+
+.metric-label,
+.meta-label,
+.kicker,
+.section-index,
+.table caption,
+.small-label {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.lang-ko .metric-label,
+body.lang-ko .meta-label,
+body.lang-ko .kicker,
+body.lang-ko .section-index,
+body.lang-ko .table caption,
+body.lang-ko .small-label {
+    letter-spacing: 0.03em;
+}
+
+.metric-value,
+.mono {
+    font-family: "JetBrains Mono", "Consolas", "SFMono-Regular", monospace;
+}
+
+.metric-value {
+    font-size: 24px;
+    line-height: 1.15;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.meta-value {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+}
+
+.section-head-main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 780px;
+}
+
+.section-index {
+    color: var(--accent);
+}
+
+.section-title {
+    font-size: 31px;
+    line-height: 1.12;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+}
+
+.section-lead {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.72;
+}
+
+body.lang-ko .section-title {
+    line-height: 1.28;
+}
+
+body.lang-ko .section-lead {
+    line-height: 1.88;
+}
+
+.card-title {
+    font-size: 18px;
+    line-height: 1.3;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.card-copy,
+.card p,
+.card li,
+.meta p,
+.horizon p {
+    color: #d6dbe6;
+    font-size: 14px;
+    line-height: 1.72;
+}
+
+body.lang-ko .card-copy,
+body.lang-ko .card p,
+body.lang-ko .card li,
+body.lang-ko .meta p,
+body.lang-ko .horizon p {
+    line-height: 1.9;
+}
+
+.bullet-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+}
+
+.bullet-list li {
+    position: relative;
+    padding-left: 18px;
+}
+
+.bullet-list li::before {
+    content: "";
+    position: absolute;
+    top: 0.72em;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--accent);
+}
+
+.note {
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(96, 165, 250, 0.24);
+    background: rgba(96, 165, 250, 0.10);
+    color: #dce9ff;
+    font-size: 14px;
+    line-height: 1.72;
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: rgba(15, 23, 42, 0.44);
+}
+
+.table th,
+.table td {
+    padding: 13px 14px;
+    text-align: left;
+    vertical-align: top;
+    font-size: 13px;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(55, 65, 81, 0.62);
+}
+
+.table th {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.table tr:last-child td {
+    border-bottom: 0;
+}
+
+.table td.mono,
+.table th.mono {
+    font-family: "JetBrains Mono", "Consolas", "SFMono-Regular", monospace;
+}
+
+.figure {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.diagram-frame {
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    background: rgba(15, 23, 42, 0.58);
+    padding: 18px;
+}
+
+.figure-caption {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.64;
+}
+
+.code-inline {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: "JetBrains Mono", "Consolas", "SFMono-Regular", monospace;
+    font-size: 12px;
+    color: #dbeafe;
+    white-space: nowrap;
+}
+
+.quote-card {
+    background: linear-gradient(180deg, rgba(96, 165, 250, 0.10), rgba(15, 23, 42, 0.22));
+}
+
+.horizon-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.footer-summary {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 16px;
+}
+
+.cover-visual {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cover-card {
+    border-radius: 28px;
+    border: 1px solid rgba(96, 165, 250, 0.22);
+    background: linear-gradient(180deg, rgba(96, 165, 250, 0.12), rgba(15, 23, 42, 0.60));
+    padding: 22px;
+}
+
+.cover-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.cover-card-copy {
+    color: #d6dbe6;
+    font-size: 14px;
+    line-height: 1.72;
+}
+
+.timeline {
+    display: grid;
+    gap: 14px;
+}
+
+.timeline-row {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(55, 65, 81, 0.62);
+}
+
+.timeline-row:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.timeline-tag {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+svg .frame {
+    fill: rgba(17, 24, 39, 0.88);
+    stroke: #374151;
+    stroke-width: 1.4;
+}
+
+svg .frame-soft {
+    fill: rgba(255, 255, 255, 0.03);
+    stroke: #374151;
+    stroke-width: 1.2;
+}
+
+svg .accent-fill {
+    fill: rgba(96, 165, 250, 0.16);
+    stroke: #60a5fa;
+    stroke-width: 1.5;
+}
+
+svg .accent-stroke {
+    stroke: #60a5fa;
+    stroke-width: 2;
+    fill: none;
+}
+
+svg .muted-stroke {
+    stroke: #64748b;
+    stroke-width: 1.8;
+    fill: none;
+}
+
+svg .text {
+    fill: #f9fafb;
+    font-size: 16px;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+body.lang-ko svg .text {
+    font-family: "Noto Sans KR", "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+
+svg .text-muted {
+    fill: #9ca3af;
+    font-size: 13px;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+body.lang-ko svg .text-muted {
+    font-family: "Noto Sans KR", "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+
+svg .text-strong {
+    fill: #f9fafb;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+svg .text-small {
+    fill: #9ca3af;
+    font-size: 12px;
+}
+
+svg .dot {
+    fill: #60a5fa;
+}
+
+@page {
+    size: A4;
+    margin: 16mm 14mm 16mm;
+}
+
+@media print {
+    body {
+        background: var(--bg);
+    }
+
+    main.paper {
+        width: auto;
+        padding: 0;
+    }
+
+    .page {
+        margin-bottom: 10mm;
+        box-shadow: none;
+    }
+}
+            </style>
+        </head>
+        <body class="lang-ko">
+            <main class="paper">
+                <section class="page cover">
+        <div class="cover-grid">
+            <div class="hero-block">
+                <div class="eyebrow">Algorithm Whitepaper</div>
+                <h1 class="title">MiniDB Studio</h1>
+                <p class="subtitle">순수 C 코어, 규칙 기반 query planning, B+ Tree traversal, WAL recovery, 그리고 상태 기반 desktop observability를 정리한 이중 언어 스토리지 엔진 백서.</p>
+                <p class="hero-copy">이 문서는 현재 코드베이스에 구현된 MiniDB Studio의 실제 구조를 정리한다. 재사용 가능한 engine module, index-aware query execution, deterministic assistant suggestion, 그리고 동일한 executor boundary 위에서 동작하는 raylib desktop synchronization을 그대로 설명한다.</p>
+                <div class="chips"><span class="chip">Pure C11 Core</span><span class="chip">Hash Index</span><span class="chip">B+ Tree</span><span class="chip">CSV Snapshot</span><span class="chip">WAL Replay</span><span class="chip">raylib Desktop</span></div>
+                <div class="hero-metrics"><div class="metric"><div class="metric-label">엔진 경계</div><div class="metric-value">재사용 가능</div></div><div class="metric"><div class="metric-label">인덱스 경로</div><div class="metric-value">3</div></div><div class="metric"><div class="metric-label">복구 모델</div><div class="metric-value">CSV + WAL</div></div><div class="metric"><div class="metric-label">문서 세트</div><div class="metric-value">영문 + 국문</div></div></div>
+            </div>
+            <div class="cover-visual">
+                <div class="cover-card">
+                    <div class="cover-card-title">아키텍처 스냅샷</div>
+                    <div class="cover-card-copy">공유 execution core 덕분에 terminal과 desktop surface 모두에서 query semantic, recovery rule, telemetry가 동일하게 유지된다.</div>
+                </div>
+                <div class="diagram-frame">
+
+<svg viewBox="0 0 520 420" role="img" aria-label="MiniDB Studio 커버 아키텍처 스택">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="18" y="18" width="484" height="384" rx="32" class="frame-soft"></rect>
+    <rect x="62" y="52" width="396" height="78" rx="18" class="accent-fill"></rect><text x="80" y="82" class="text text-strong" text-anchor="start">Desktop Studio Shell</text><text x="80" y="108" class="text-muted" text-anchor="start">raylib panel<tspan x="80" dy="17">query editor</tspan><tspan x="80" dy="17">result grid</tspan></text>
+    <rect x="62" y="154" width="396" height="78" rx="18" class="frame"></rect><text x="80" y="184" class="text text-strong" text-anchor="start">Shared Executor Boundary</text><text x="80" y="210" class="text-muted" text-anchor="start">parser<tspan x="80" dy="17">planner</tspan><tspan x="80" dy="17">CRUD dispatch</tspan></text>
+    <rect x="62" y="256" width="186" height="98" rx="18" class="frame"></rect><text x="80" y="286" class="text text-strong" text-anchor="start">Hash + WAL</text><text x="80" y="312" class="text-muted" text-anchor="start">exact match<tspan x="80" dy="17">append log</tspan></text>
+    <rect x="272" y="256" width="186" height="98" rx="18" class="accent-fill"></rect><text x="290" y="286" class="text text-strong" text-anchor="start">B+ Tree + Metrics</text><text x="290" y="312" class="text-muted" text-anchor="start">range scan<tspan x="290" dy="17">ordered traversal</tspan></text>
+    <line x1="260" y1="130" x2="260" y2="154" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="156" y1="232" x2="156" y2="256" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="364" y1="232" x2="364" y2="256" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <text x="62" y="386" class="text-muted" text-anchor="start">하나의 code path 위에 terminal과 desktop UI가 함께 올라간다.</text>
+</svg>
+
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="meta-grid"><div class="meta"><div class="meta-label">대상 독자</div><div class="meta-value">엔지니어링 포트폴리오 검토자, 면접관, 시스템 프로그래밍 동료.</div></div><div class="meta"><div class="meta-label">문서 범위</div><div class="meta-value">parser, planner, execution engine, recovery, desktop synchronization, performance telemetry.</div></div><div class="meta"><div class="meta-label">포지셔닝</div><div class="meta-value">설명 가능한 내부 구조와 데모 친화적 UI를 갖춘 lightweight database management studio.</div></div></div>
+        </div>
+    </section>
+                <section class="page break">
+    <header class="section-head">
+        <div class="section-head-main">
+            <div class="section-index">섹션 02</div>
+            <h2 class="section-title">Project Overview</h2>
+            <p class="section-lead">MiniDB Studio는 in-memory record engine, rule-based optimizer, 그리고 desktop control surface를 하나의 일관된 구조로 묶는다. 단순 parser 데모가 아니라 작은 database studio처럼 동작하도록 설계된 포트폴리오 프로젝트다.</p>
+        </div>
+    </header>
+    <div class="grid-2"><article class="card"><h3 class="card-title">시스템 범위</h3><ul class="bullet-list"><li><span class="code-inline">C11</span> 기반 storage core가 record, index, recovery state, execution statistic의 수명을 직접 관리한다.</li><li>터미널 콘솔과 raylib desktop app은 동일한 <span class="code-inline">parse -> plan -> execute</span> 경계를 재사용한다.</li><li>정확 일치 조회는 hash index로 가속하고, ordered access와 range scan은 B+ Tree가 담당한다.</li><li>Persistence는 snapshot + log replay 모델로 구성해, 복구 흐름을 짧은 면접 설명 안에서도 명확하게 전달할 수 있다.</li></ul></article><article class="card"><h3 class="card-title">모듈 구성</h3><table class="table"><thead><tr><th>모듈</th><th>주요 책임</th><th>대표 symbol</th></tr></thead><tbody><tr><td><span class="mono">parser.c</span></td><td>tokenization, validation, command decoding.</td><td><span class="mono">parse_select</span>, <span class="mono">parse_update</span></td></tr><tr><td><span class="mono">planner.c</span></td><td>규칙 기반 access-path 선택과 sort pushdown 판단.</td><td><span class="mono">planner_choose_plan</span></td></tr><tr><td><span class="mono">database.c</span></td><td>CRUD dispatch, filter evaluation, index maintenance, query statistic 집계.</td><td><span class="mono">database_select</span>, <span class="mono">database_estimate_memory_usage</span></td></tr><tr><td><span class="mono">bptree.c</span></td><td>ordered indexing, split/rebalance logic, range traversal.</td><td><span class="mono">bptree_insert</span>, <span class="mono">bptree_collect_stats</span></td></tr><tr><td><span class="mono">wal.c</span></td><td>append-only mutation log와 restart replay.</td><td><span class="mono">wal_append_insert</span>, <span class="mono">wal_replay</span></td></tr><tr><td><span class="mono">studio_app.c</span></td><td>desktop state transition, result grid behavior, metric streaming.</td><td><span class="mono">studio_execute_text</span>, <span class="mono">studio_push_metrics</span></td></tr></tbody></table></article></div>
+</section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">섹션 03</div>
+                <h2 class="section-title">Core Storage Engine Architecture</h2>
+                <p class="section-lead">가장 중요한 설계 결정은 ownership 분리다. Record의 생명주기는 <span class="code-inline">Database</span> 안에 고정되고, 보조 index는 <span class="code-inline">Record*</span> 참조만 빌려 쓴다. UI에 전달되는 summary는 별도의 임시 result row를 materialize하여 desktop layer가 storage memory의 owner가 되지 않도록 유지한다.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">실행 계층</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 470" role="img" aria-label="핵심 아키텍처 계층">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="16" y="18" width="948" height="434" rx="26" class="frame-soft"></rect>
+    <rect x="56" y="64" width="180" height="96" rx="18" class="accent-fill"></rect><text x="74" y="94" class="text text-strong" text-anchor="start">Desktop + Terminal</text><text x="74" y="120" class="text-muted" text-anchor="start">raylib Studio<tspan x="74" dy="17">CLI shell</tspan></text>
+    <rect x="292" y="64" width="182" height="96" rx="18" class="frame"></rect><text x="310" y="94" class="text text-strong" text-anchor="start">AppContext</text><text x="310" y="120" class="text-muted" text-anchor="start">history<tspan x="310" dy="17">logger</tspan><tspan x="310" dy="17">cache</tspan></text>
+    <rect x="530" y="64" width="182" height="96" rx="18" class="frame"></rect><text x="548" y="94" class="text text-strong" text-anchor="start">Parser + Planner</text><text x="548" y="120" class="text-muted" text-anchor="start">tokenize<tspan x="548" dy="17">predicate decode</tspan><tspan x="548" dy="17">access path</tspan></text>
+    <rect x="768" y="64" width="156" height="96" rx="18" class="accent-fill"></rect><text x="786" y="94" class="text text-strong" text-anchor="start">Database</text><text x="786" y="120" class="text-muted" text-anchor="start">records<tspan x="786" dy="17">filters</tspan><tspan x="786" dy="17">stats</tspan></text>
+
+    <line x1="236" y1="112" x2="292" y2="112" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="474" y1="112" x2="530" y2="112" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="712" y1="112" x2="768" y2="112" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+
+    <rect x="120" y="264" width="178" height="96" rx="18" class="frame"></rect><text x="138" y="294" class="text text-strong" text-anchor="start">Hash Index</text><text x="138" y="320" class="text-muted" text-anchor="start">id<tspan x="138" dy="17">department</tspan></text>
+    <rect x="402" y="246" width="198" height="116" rx="18" class="accent-fill"></rect><text x="420" y="276" class="text text-strong" text-anchor="start">Ordered Index Layer</text><text x="420" y="302" class="text-muted" text-anchor="start">B+ Tree(id)<tspan x="420" dy="17">B+ Tree(age)</tspan><tspan x="420" dy="17">range scan</tspan><tspan x="420" dy="17">ORDER BY age</tspan></text>
+    <rect x="692" y="246" width="118" height="116" rx="18" class="frame"></rect><text x="710" y="276" class="text text-strong" text-anchor="start">CSV Snapshot</text><text x="710" y="302" class="text-muted" text-anchor="start">SAVE<tspan x="710" dy="17">LOAD</tspan></text>
+    <rect x="826" y="246" width="98" height="116" rx="18" class="frame"></rect><text x="844" y="276" class="text text-strong" text-anchor="start">WAL</text><text x="844" y="302" class="text-muted" text-anchor="start">INSERT<tspan x="844" dy="17">UPDATE</tspan><tspan x="844" dy="17">DELETE</tspan></text>
+
+    <line x1="846" y1="160" x2="846" y2="246" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="812" y1="160" x2="812" y2="246" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="790" y1="160" x2="501" y2="246" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="790" y1="160" x2="209" y2="264" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+
+    <text x="56" y="220" class="text text-strong" text-anchor="start">Shared engine boundary</text>
+    <text x="56" y="244" class="text-muted" text-anchor="start">UI는 caller로만 남고, mutation과 ownership 규칙은 엔진이 책임진다.</text>
+</svg>
+</div><p class="figure-caption">기존 terminal과 desktop studio가 동일한 execution path를 공유한다. 이 분리 덕분에 pure C engine은 유지하고 presentation layer만 확장할 수 있다.</p></div></article><article class="card"><h3 class="card-title">Memory Ownership Model</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 340" role="img" aria-label="메모리 ownership 모델">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="42" y="42" width="180" height="96" rx="18" class="accent-fill"></rect><text x="60" y="72" class="text text-strong" text-anchor="start">Database</text><text x="60" y="98" class="text-muted" text-anchor="start">record lifetime owner<tspan x="60" dy="17">exit 시 index 정리</tspan></text>
+    <rect x="282" y="42" width="176" height="96" rx="18" class="frame"></rect><text x="300" y="72" class="text text-strong" text-anchor="start">Record nodes</text><text x="300" y="98" class="text-muted" text-anchor="start">id, name, age, department<tspan x="300" dy="17">single source of truth</tspan></text>
+    <rect x="534" y="30" width="176" height="108" rx="18" class="frame"></rect><text x="552" y="60" class="text text-strong" text-anchor="start">Hash buckets</text><text x="552" y="86" class="text-muted" text-anchor="start">Record* 참조만 보유<tspan x="552" dy="17">record free 금지</tspan></text>
+    <rect x="762" y="30" width="176" height="108" rx="18" class="frame"></rect><text x="780" y="60" class="text text-strong" text-anchor="start">B+ Tree value lists</text><text x="780" y="86" class="text-muted" text-anchor="start">Record* 참조만 보유<tspan x="780" dy="17">leaf fan-out 유지</tspan></text>
+
+    <rect x="282" y="202" width="196" height="102" rx="18" class="frame"></rect><text x="300" y="232" class="text text-strong" text-anchor="start">CommandExecutionSummary</text><text x="300" y="258" class="text-muted" text-anchor="start">temporary query result<tspan x="300" dy="17">materialization owner</tspan></text>
+    <rect x="560" y="202" width="176" height="102" rx="18" class="frame"></rect><text x="578" y="232" class="text text-strong" text-anchor="start">QueryResult rows[]</text><text x="578" y="258" class="text-muted" text-anchor="start">UI-safe copy<tspan x="578" dy="17">cache 가능한 payload</tspan></text>
+    <rect x="790" y="202" width="148" height="102" rx="18" class="frame"></rect><text x="808" y="232" class="text text-strong" text-anchor="start">Studio UI</text><text x="808" y="258" class="text-muted" text-anchor="start">read-only consumer<tspan x="808" dy="17">selection + sort state</tspan></text>
+
+    <line x1="222" y1="90" x2="282" y2="90" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="458" y1="90" x2="534" y2="90" class="muted-stroke" marker-end="url(#arrow-muted)" stroke-dasharray="6 6"></line>
+    <line x1="458" y1="90" x2="762" y2="90" class="muted-stroke" marker-end="url(#arrow-muted)" stroke-dasharray="6 6"></line>
+    <line x1="380" y1="138" x2="380" y2="202" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="478" y1="252" x2="560" y2="252" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="736" y1="252" x2="790" y2="252" class="muted-stroke" marker-end="url(#arrow-muted)" stroke-dasharray="6 6"></line>
+
+    <text x="534" y="164" class="text-muted" text-anchor="start">점선 화살표 = borrowed reference</text>
+    <text x="282" y="164" class="text-muted" text-anchor="start">실선 화살표 = owning lifetime</text>
+</svg>
+</div><p class="figure-caption">이 ownership 분리 덕분에 LOAD도 안전하다. 임시 <span class="code-inline">Database</span>를 먼저 완성하고 검증한 뒤에만 <span class="code-inline">AppContext</span>에 교체할 수 있다.</p></div><div class="note">설계 invariant: mutation path가 index와 persistence metadata를 먼저 갱신하고, 그 다음에 UI가 새로운 상태를 읽는다. raylib layer는 storage object를 직접 free하지 않는다.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">섹션 04</div>
+                <h2 class="section-title">Query Planner &amp; Optimizer Algorithm</h2>
+                <p class="section-lead">Optimizer는 의도적으로 lightweight하고 explainable하다. cost model 대신 query shape에 따라 최적 access path를 고르는 deterministic rule set을 사용하며, 선택된 plan 문자열은 그대로 desktop inspector에 표시된다.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Planner Decision Flow</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 420" role="img" aria-label="planner 흐름도">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="72" y="54" width="184" height="96" rx="18" class="accent-fill"></rect><text x="90" y="84" class="text text-strong" text-anchor="start">Parsed SELECT</text><text x="90" y="110" class="text-muted" text-anchor="start">predicate<tspan x="90" dy="17">ORDER BY</tspan><tspan x="90" dy="17">LIMIT</tspan></text>
+    <rect x="356" y="38" width="248" height="122" rx="18" class="frame"></rect><text x="374" y="68" class="text text-strong" text-anchor="start">Exact indexed predicate?</text><text x="374" y="94" class="text-muted" text-anchor="start">id = x<tspan x="374" dy="17">department = x</tspan><tspan x="374" dy="17">single-key equality</tspan></text>
+    <rect x="704" y="38" width="192" height="122" rx="18" class="accent-fill"></rect><text x="722" y="68" class="text text-strong" text-anchor="start">Hash Exact Lookup</text><text x="722" y="94" class="text-muted" text-anchor="start">가장 낮은 지연<tspan x="722" dy="17">exact match path</tspan></text>
+    <rect x="356" y="214" width="248" height="122" rx="18" class="frame"></rect><text x="374" y="244" class="text text-strong" text-anchor="start">Range or ordered age path?</text><text x="374" y="270" class="text-muted" text-anchor="start">age &gt; x<tspan x="374" dy="17">age &gt;= x</tspan><tspan x="374" dy="17">ORDER BY age LIMIT k</tspan></text>
+    <rect x="704" y="214" width="192" height="122" rx="18" class="accent-fill"></rect><text x="722" y="244" class="text text-strong" text-anchor="start">B+ Tree Range Scan</text><text x="722" y="270" class="text-muted" text-anchor="start">ordered leaf walk<tspan x="722" dy="17">limit pushdown</tspan></text>
+    <rect x="72" y="250" width="184" height="86" rx="18" class="frame"></rect><text x="90" y="280" class="text text-strong" text-anchor="start">Full Scan</text><text x="90" y="306" class="text-muted" text-anchor="start">predicate filter<tspan x="90" dy="17">필요 시 in-memory sort</tspan></text>
+
+    <line x1="256" y1="102" x2="356" y2="102" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="604" y1="102" x2="704" y2="102" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="480" y1="160" x2="480" y2="214" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="604" y1="274" x2="704" y2="274" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="356" y1="274" x2="256" y2="294" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+
+    <text x="320" y="86" class="text-muted" text-anchor="start">yes</text>
+    <text x="486" y="188" class="text-muted" text-anchor="start">no<tspan x="486" dy="18">또는 OR-path fallback filtering 필요</tspan></text>
+    <text x="300" y="292" class="text-muted" text-anchor="start">적절한 index가 없으면 fallback</text>
+</svg>
+</div><p class="figure-caption">Planner는 <span class="code-inline">B+ Tree Range Scan</span>, <span class="code-inline">Hash Exact Lookup</span> 같은 plan label을 생성하고, 이 문자열이 그대로 desktop inspector에 노출된다.</p></div></article><article class="card"><h3 class="card-title">규칙 집합과 Planner 효과</h3><table class="table"><thead><tr><th>Query shape</th><th>Primary plan</th><th>Planner effect</th></tr></thead><tbody><tr><td><span class="mono">SELECT WHERE id = 42</span></td><td>Hash exact lookup 또는 B+ exact lookup</td><td>하나의 bucket 또는 key slot만 검사하므로 row scan 수가 매우 작다.</td></tr><tr><td><span class="mono">SELECT WHERE department = Oncology</span></td><td>Hash exact lookup</td><td>department hash index를 seed path로 사용하고 후보 chain만 추가 평가한다.</td></tr><tr><td><span class="mono">SELECT WHERE age &gt; 30</span></td><td>B+ Tree range scan</td><td>첫 qualifying leaf에서 시작해 linked leaf chain을 따라간다.</td></tr><tr><td><span class="mono">SELECT ORDER BY age LIMIT 10</span></td><td>B+ Tree ordered scan</td><td>leaf traversal 결과가 이미 정렬되어 있으면 추가 sort를 생략한다.</td></tr><tr><td>혼합 <span class="mono">AND</span> predicate</td><td>Indexed seed + post-filter</td><td>가장 좋은 seed path를 선택한 뒤 나머지 조건을 in-memory로 평가한다.</td></tr><tr><td>광범위한 <span class="mono">OR</span> 또는 미지원 조합</td><td>Full scan</td><td>정확성을 우선해 전체 record walk로 fallback한다.</td></tr></tbody></table><div class="note">Planner는 추가 in-memory sort가 필요한지도 함께 결정한다. leaf traversal이 이미 <span class="code-inline">ORDER BY age</span>를 만족하면 reorder 비용을 피할 수 있다.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">섹션 05</div>
+                <h2 class="section-title">B+ Tree Traversal Logic</h2>
+                <p class="section-lead">Ordered index layer의 목적은 age 기반 range scan과 ordered traversal을 단순 선형 검색이 아니라 storage-engine 수준의 동작으로 보이게 만드는 것이다. 실제 record는 모두 leaf에 유지하고, internal node는 separator key만 보관하며, leaf는 forward chain으로 연결된다.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Split and Range Path</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 460" role="img" aria-label="B+ Tree split과 range traversal">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="380" y="36" width="220" height="88" rx="18" class="accent-fill"></rect><text x="398" y="66" class="text text-strong" text-anchor="start">Internal node</text><text x="398" y="92" class="text-muted" text-anchor="start">separator key로 routing<tspan x="398" dy="17">record는 leaf에 유지</tspan></text>
+    <rect x="114" y="178" width="216" height="104" rx="18" class="frame"></rect><text x="132" y="208" class="text text-strong" text-anchor="start">Leaf A</text><text x="132" y="234" class="text-muted" text-anchor="start">22, 24, 27<tspan x="132" dy="17">split 이전</tspan></text>
+    <rect x="382" y="178" width="216" height="104" rx="18" class="accent-fill"></rect><text x="400" y="208" class="text text-strong" text-anchor="start">Leaf B</text><text x="400" y="234" class="text-muted" text-anchor="start">31, 34<tspan x="400" dy="17">첫 qualifying leaf</tspan></text>
+    <rect x="650" y="178" width="216" height="104" rx="18" class="frame"></rect><text x="668" y="208" class="text text-strong" text-anchor="start">Leaf C</text><text x="668" y="234" class="text-muted" text-anchor="start">38, 42, 47<tspan x="668" dy="17">next 포인터로 연결</tspan></text>
+    <rect x="382" y="330" width="244" height="92" rx="18" class="frame"></rect><text x="400" y="360" class="text text-strong" text-anchor="start">Range scan</text><text x="400" y="386" class="text-muted" text-anchor="start">age &gt;= 31 위치 탐색<tspan x="400" dy="17">leaf-&gt;next 순회</tspan></text>
+
+    <line x1="468" y1="124" x2="222" y2="178" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="490" y1="124" x2="490" y2="178" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="512" y1="124" x2="758" y2="178" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="598" y1="228" x2="650" y2="228" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="330" y1="228" x2="382" y2="228" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="490" y1="282" x2="490" y2="330" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+
+    <circle cx="438" cy="228" r="8" class="dot"></circle>
+    <circle cx="706" cy="228" r="8" class="dot"></circle>
+    <text x="146" y="306" class="text-muted" text-anchor="start">임시 m+1 배열</text>
+    <text x="392" y="316" class="text-muted" text-anchor="start">right leaf의 첫 key를 promote</text>
+    <text x="674" y="306" class="text-muted" text-anchor="start">Leaf chain이 ordered traversal을 지원</text>
+</svg>
+</div><p class="figure-caption">현재 구현은 <span class="code-inline">bptree.c</span> 안에 split comment를 직접 남겨 leaf/internal promotion 규칙이 코드 리뷰에서도 바로 보이도록 했다.</p></div></article><article class="card"><h3 class="card-title">Operational Semantics</h3><ul class="bullet-list"><li><span class="code-inline">bptree_insert</span>는 올바른 leaf까지 내려간 뒤 정렬 순서를 유지하며 삽입하고, overflow가 발생했을 때만 split 결과를 상위로 전파한다.</li><li>Leaf split은 여유 슬롯이 하나 있는 임시 배열을 사용해 lower half는 현재 node에 남기고 upper half는 새로운 right sibling으로 이동한 뒤, 그 right sibling의 첫 key를 promote한다.</li><li>Internal split은 가운데 separator를 상위로 promote하면서 child 배열을 재배치해 parent routing을 유지한다.</li><li>중복 age는 하나의 leaf key 아래 value list로 연결되므로, duplicate key를 위해 separator를 반복 생성하지 않아도 된다.</li><li>Delete는 borrow-or-merge rebalancing helper를 사용해 underflow node를 복구한 뒤 caller로 돌아간다.</li></ul><table class="table"><thead><tr><th>Operation</th><th class="mono">Typical complexity</th><th>의미</th></tr></thead><tbody><tr><td>Exact lookup</td><td class="mono"><span class="mono">O(log_B n)</span></td><td>separator를 따라 하나의 leaf로 내려간다.</td></tr><tr><td>Range scan</td><td class="mono"><span class="mono">O(log_B n + k)</span></td><td>한 번 seek하고 leaf chain을 스트리밍한다.</td></tr><tr><td>Insert</td><td class="mono"><span class="mono">O(log_B n)</span></td><td>overflow node에서만 split 발생.</td></tr><tr><td>Delete</td><td class="mono"><span class="mono">O(log_B n)</span></td><td>underflow 시 borrow/merge.</td></tr></tbody></table></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">섹션 06</div>
+                <h2 class="section-title">WAL and Snapshot Recovery Flow</h2>
+                <p class="section-lead">Persistence는 checkpoint 가능한 snapshot과 append-only mutation log 조합으로 모델링된다. 이 방식은 디스크 동작을 이해하기 쉽다. SAVE는 안정적인 CSV 이미지를 만들고, LOAD는 그 이후 mutation을 WAL에서 replay한다.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Recovery Sequence</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 380" role="img" aria-label="snapshot과 WAL recovery 흐름">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="56" y="134" width="154" height="92" rx="18" class="accent-fill"></rect><text x="74" y="164" class="text text-strong" text-anchor="start">LOAD command</text><text x="74" y="190" class="text-muted" text-anchor="start">임시 database 생성</text>
+    <rect x="264" y="134" width="176" height="92" rx="18" class="frame"></rect><text x="282" y="164" class="text text-strong" text-anchor="start">CSV snapshot</text><text x="282" y="190" class="text-muted" text-anchor="start">persistence_load_csv</text>
+    <rect x="494" y="134" width="176" height="92" rx="18" class="accent-fill"></rect><text x="512" y="164" class="text text-strong" text-anchor="start">WAL replay</text><text x="512" y="190" class="text-muted" text-anchor="start">wal_replay<tspan x="512" dy="17">INSERT | UPDATE | DELETE</tspan></text>
+    <rect x="724" y="134" width="194" height="92" rx="18" class="frame"></rect><text x="742" y="164" class="text text-strong" text-anchor="start">Live state 교체</text><text x="742" y="190" class="text-muted" text-anchor="start">AppContext database 교체<tspan x="742" dy="17">status + memory 갱신</tspan></text>
+
+    <rect x="264" y="40" width="176" height="64" rx="18" class="frame"></rect><text x="282" y="70" class="text text-strong" text-anchor="start">SAVE command</text><text x="282" y="96" class="text-muted" text-anchor="start">persistence_save_csv</text>
+    <rect x="494" y="40" width="176" height="64" rx="18" class="frame"></rect><text x="512" y="70" class="text text-strong" text-anchor="start">WAL checkpoint</text><text x="512" y="96" class="text-muted" text-anchor="start">durable snapshot 후 log 정리</text>
+
+    <line x1="210" y1="180" x2="264" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="440" y1="180" x2="494" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="670" y1="180" x2="724" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="352" y1="104" x2="352" y2="134" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="582" y1="104" x2="582" y2="134" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <text x="724" y="244" class="text-muted" text-anchor="start">임시 restore가 끝까지 성공했을 때만 live state를 교체한다.</text>
+</svg>
+</div><p class="figure-caption">Executor는 먼저 임시 <span class="code-inline">Database</span>에 CSV를 로드하고 <span class="code-inline">data/db.log</span>를 replay한 뒤에만 active context를 교체한다.</p></div></article><article class="card"><h3 class="card-title">Recovery Guarantees</h3><table class="table"><thead><tr><th>단계</th><th>현재 알고리즘</th><th>의미</th></tr></thead><tbody><tr><td>Mutation logging</td><td><span class="mono">INSERT|...</span>, <span class="mono">UPDATE|...</span>, <span class="mono">DELETE|...</span> 레코드를 append.</td><td>마지막 snapshot 이후 모든 변경이 재생 가능한 형태로 남는다.</td></tr><tr><td>Snapshot save</td><td>모든 row를 CSV로 기록한 뒤 WAL을 checkpoint.</td><td>CSV가 간결한 restore point가 되고 log 길이도 제어된다.</td></tr><tr><td>Restore</td><td>임시 engine에 CSV를 load하고 WAL을 replay하며 record insert 과정에서 index를 함께 복원.</td><td>정상 실행과 동일한 code path로 index 일관성이 복원된다.</td></tr><tr><td>Activation</td><td>성공 후에만 restored database를 <span class="mono">AppContext</span>에 대입.</td><td>부분 복구 상태가 active session을 오염시키지 않는다.</td></tr></tbody></table><div class="note">Replay가 normal database mutation API를 그대로 호출하기 때문에, index consistency는 별도의 recovery 단계가 아니라 insert/update/delete 재사용의 결과로 자연스럽게 유지된다.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">섹션 07</div>
+                <h2 class="section-title">AI Query Assistant Parsing Flow</h2>
+                <p class="section-lead">현재 desktop assistant는 의도적으로 deterministic하다. LLM runtime이 아니라, row context와 이전 execution plan, 그리고 demo heuristic을 바탕으로 유효한 SQL-like suggestion을 생성한 뒤, 그 suggestion을 사용자가 입력한 text와 동일한 parser 경로로 다시 흘려보낸다.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Current Assistant Pipeline</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 390" role="img" aria-label="assistant suggestion 흐름">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="44" y="54" width="182" height="98" rx="18" class="frame"></rect><text x="62" y="84" class="text text-strong" text-anchor="start">Selected row</text><text x="62" y="110" class="text-muted" text-anchor="start">id, department, age context</text>
+    <rect x="44" y="222" width="182" height="98" rx="18" class="frame"></rect><text x="62" y="252" class="text text-strong" text-anchor="start">Last plan feedback</text><text x="62" y="278" class="text-muted" text-anchor="start">full scan 경고<tspan x="62" dy="17">index-aware hint</tspan></text>
+    <rect x="312" y="136" width="216" height="104" rx="18" class="accent-fill"></rect><text x="330" y="166" class="text text-strong" text-anchor="start">studio_build_assistant_content</text><text x="330" y="192" class="text-muted" text-anchor="start">유효한 query template 생성<tspan x="330" dy="17">engine grammar 유지</tspan></text>
+    <rect x="612" y="136" width="162" height="104" rx="18" class="frame"></rect><text x="630" y="166" class="text text-strong" text-anchor="start">SQL editor</text><text x="630" y="192" class="text-muted" text-anchor="start">suggestion 삽입<tspan x="630" dy="17">Ctrl+Enter 실행</tspan></text>
+    <rect x="814" y="136" width="122" height="104" rx="18" class="frame"></rect><text x="832" y="166" class="text text-strong" text-anchor="start">Shared parser</text><text x="832" y="192" class="text-muted" text-anchor="start">동일한 parse/plan path</text>
+
+    <line x1="226" y1="104" x2="312" y2="168" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="226" y1="272" x2="312" y2="208" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="528" y1="188" x2="612" y2="188" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="774" y1="188" x2="814" y2="188" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <text x="612" y="256" class="text-muted" text-anchor="start">추천 command도 특별 취급 없이 동일한 execution path를 통과한다.</text>
+    <text x="44" y="344" class="text-muted" text-anchor="start">이 설계는 assistant를 정직하게 만든다. 모든 suggestion은 manual query와 같은 parser contract를 만족해야 한다.</text>
+</svg>
+</div><p class="figure-caption">예를 들어 row 선택이나 plan feedback을 바탕으로 <span class="code-inline">SELECT WHERE id = ...</span>, <span class="code-inline">SELECT WHERE age &gt; ... ORDER BY age LIMIT 10</span> 같은 query를 제안할 수 있다.</p></div></article><article class="card"><h3 class="card-title">Assistant Design Contract</h3><ul class="bullet-list"><li>선택된 row 정보가 deterministic query template의 seed가 되므로, 현재 grammar에서 항상 유효한 문장만 생성한다.</li><li>직전 execution plan이 full scan이었다면 더 index-friendly한 대안을 우선 제안한다.</li><li>Editor가 항상 visible source of truth로 남기 때문에, 사용자는 실행 전에 suggestion을 직접 확인하고 수정할 수 있다.</li><li>Assistant output도 <span class="code-inline">parse_command</span>를 다시 통과하므로 validation, logging, benchmarking, caching이 그대로 유지된다.</li></ul><div class="note">실제 natural-language parsing은 roadmap에 두는 것이 맞다. 현재 구현은 engine state를 context-aware query suggestion으로 바꿔 주는 형태의 “AI assistant”를 제공한다.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">섹션 08</div>
+                <h2 class="section-title">Desktop UI-State Synchronization</h2>
+                <p class="section-lead">Desktop application이 반응성을 유지하는 이유는 UI state가 얇고 파생적이기 때문이다. Query execution은 <span class="code-inline">AppContext</span> 내부에서 engine state를 갱신하고, desktop layer는 editor, grid, inspector, metric dashboard, footer에 필요한 summary만 소비한다.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">State Transition Graph</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 410" role="img" aria-label="desktop UI synchronization 흐름">
+
+<defs>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#60a5fa"></path>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"></path>
+    </marker>
+</defs>
+
+    <rect x="52" y="132" width="148" height="96" rx="18" class="frame"></rect><text x="70" y="162" class="text text-strong" text-anchor="start">User action</text><text x="70" y="188" class="text-muted" text-anchor="start">type, click, shortcut</text>
+    <rect x="244" y="132" width="198" height="96" rx="18" class="accent-fill"></rect><text x="262" y="162" class="text text-strong" text-anchor="start">studio_execute_text</text><text x="262" y="188" class="text-muted" text-anchor="start">run input<tspan x="262" dy="17">selection state 초기화</tspan></text>
+    <rect x="486" y="132" width="188" height="96" rx="18" class="frame"></rect><text x="504" y="162" class="text text-strong" text-anchor="start">app_context_run_input</text><text x="504" y="188" class="text-muted" text-anchor="start">parse<tspan x="504" dy="17">plan</tspan><tspan x="504" dy="17">execute</tspan><tspan x="504" dy="17">log</tspan></text>
+    <rect x="716" y="132" width="214" height="96" rx="18" class="frame"></rect><text x="734" y="162" class="text text-strong" text-anchor="start">CommandExecutionSummary</text><text x="734" y="188" class="text-muted" text-anchor="start">message<tspan x="734" dy="17">result rows</tspan><tspan x="734" dy="17">stats</tspan><tspan x="734" dy="17">plan</tspan></text>
+
+    <rect x="244" y="286" width="164" height="72" rx="18" class="frame"></rect><text x="262" y="316" class="text text-strong" text-anchor="start">Result grid</text><text x="262" y="342" class="text-muted" text-anchor="start">rows, sort, page</text>
+    <rect x="430" y="286" width="164" height="72" rx="18" class="frame"></rect><text x="448" y="316" class="text text-strong" text-anchor="start">Metric buffers</text><text x="448" y="342" class="text-muted" text-anchor="start">latency, scans, memory</text>
+    <rect x="616" y="286" width="164" height="72" rx="18" class="frame"></rect><text x="634" y="316" class="text text-strong" text-anchor="start">Inspector</text><text x="634" y="342" class="text-muted" text-anchor="start">plan, index, benchmark</text>
+    <rect x="802" y="286" width="128" height="72" rx="18" class="frame"></rect><text x="820" y="316" class="text text-strong" text-anchor="start">Status bar</text><text x="820" y="342" class="text-muted" text-anchor="start">records, storage, queries</text>
+
+    <line x1="200" y1="180" x2="244" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="442" y1="180" x2="486" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="674" y1="180" x2="716" y2="180" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="335" y1="228" x2="326" y2="286" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="560" y1="228" x2="512" y2="286" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+    <line x1="790" y1="228" x2="698" y2="286" class="accent-stroke" marker-end="url(#arrow-accent)"></line>
+    <line x1="860" y1="228" x2="866" y2="286" class="muted-stroke" marker-end="url(#arrow-muted)"></line>
+</svg>
+</div><p class="figure-caption">Desktop shell은 storage view를 직접 재구성하지 않는다. 대신 compact execution summary와 dashboard status snapshot을 받아 필요한 패널만 갱신한다.</p></div></article><article class="card"><h3 class="card-title">Synchronization Points</h3><table class="table"><thead><tr><th>UI event</th><th>주요 함수</th><th>상태 변화</th></tr></thead><tbody><tr><td>Query 실행</td><td><span class="mono">studio_execute_text</span></td><td>command를 실행하고 최신 summary를 반영하며 오래된 row selection 상태를 정리한다.</td></tr><tr><td>Engine dispatch</td><td><span class="mono">app_context_run_input</span></td><td>cache counter, history, logger, summary payload를 하나의 경계 안에서 갱신한다.</td></tr><tr><td>Metrics update</td><td><span class="mono">studio_push_metrics</span></td><td>latency, rows scanned, memory usage, cache ratio, chosen plan counter를 append한다.</td></tr><tr><td>Grid sort</td><td><span class="mono">result_grid_sort</span></td><td>materialized result row만 재정렬하고 underlying table은 수정하지 않는다.</td></tr><tr><td>Footer refresh</td><td><span class="mono">app_context_snapshot_status</span></td><td>record count, memory estimate, session query total을 갱신한다.</td></tr></tbody></table><div class="note">이 흐름 덕분에 studio는 시각적으로 풍부해도 별도의 storage layer가 되지 않는다. UI는 presentation state를, engine은 truth를 가진다.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">섹션 09</div>
+                <h2 class="section-title">Performance Dashboard Metrics</h2>
+                <p class="section-lead">MiniDB Studio는 engine 내부 동작을 presentation-friendly telemetry로 드러낸다. 각 command 실행 후 compact metric series를 갱신하므로, desktop dashboard는 결과뿐 아니라 결과가 어떤 비용 구조로 만들어졌는지도 설명할 수 있다.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Metric Data Flow</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 360" role="img" aria-label="performance metric sparkline과 usage chart">
+    <defs>
+        <linearGradient id="latency-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.45"></stop>
+            <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.02"></stop>
+        </linearGradient>
+    </defs>
+    <rect x="20" y="20" width="940" height="320" rx="24" class="frame-soft"></rect>
+    <text x="42" y="62" class="text text-strong">Latency trend</text>
+    <text x="516" y="62" class="text text-strong">Index usage frequency</text>
+
+    <polyline fill="url(#latency-fill)" stroke="none" points="46,208 98,188 150,206 202,148 254,162 306,114 358,126 410,92 462,116 462,252 46,252"></polyline>
+    <polyline fill="none" stroke="#60a5fa" stroke-width="3" points="46,208 98,188 150,206 202,148 254,162 306,114 358,126 410,92 462,116"></polyline>
+    <line x1="46" y1="252" x2="462" y2="252" stroke="#374151" stroke-width="1.4"></line>
+    <text x="46" y="278" class="text-small">최근 query 순서</text>
+
+    <rect x="530" y="212" width="72" height="40" rx="12" class="frame"></rect>
+    <rect x="626" y="172" width="72" height="80" rx="12" class="accent-fill"></rect>
+    <rect x="722" y="146" width="72" height="106" rx="12" class="frame"></rect>
+    <rect x="818" y="118" width="72" height="134" rx="12" class="frame"></rect>
+    <text x="548" y="278" class="text-small">Cache</text>
+    <text x="640" y="278" class="text-small">Hash</text>
+    <text x="732" y="278" class="text-small">B+</text>
+    <text x="824" y="278" class="text-small">Scan</text>
+    <text x="516" y="312" class="text-muted">실행마다 latency, rows scanned, memory, cache ratio, selected-plan counter가 갱신된다.</text>
+</svg>
+</div><p class="figure-caption">Dashboard는 이미 execution summary에 존재하는 engine-side signal을 시각화한다. 즉 UI가 값을 만들어내는 것이 아니라, 엔진이 집계한 telemetry를 읽는다.</p></div></article><article class="card"><h3 class="card-title">Metric Definitions</h3><table class="table"><thead><tr><th>Metric</th><th>Source field</th><th>운영적 의미</th></tr></thead><tbody><tr><td>Query latency trend</td><td><span class="mono">last_elapsed_ms</span></td><td>가장 최근 command path의 wall-clock duration.</td></tr><tr><td>Rows scanned</td><td><span class="mono">summary.stats.rows_scanned</span></td><td>해당 query를 처리하기 위해 접근한 record 또는 index candidate 수.</td></tr><tr><td>Memory usage</td><td><span class="mono">database_estimate_memory_usage</span></td><td>record, index, B+ Tree value node를 포함한 현재 storage footprint 추정치.</td></tr><tr><td>Cache hit ratio</td><td><span class="mono">query_cache_hits / query_cache_lookups</span></td><td>반복 가능한 command가 session cache로 처리되는 비율.</td></tr><tr><td>Index usage frequency</td><td>chosen plan 기준 counter</td><td>세션 동안 hash, B+ Tree, cache, full-scan path가 얼마나 선택되었는지.</td></tr></tbody></table><div class="note">Dashboard는 의도적으로 lightweight하다. 작은 chart buffer만 유지하고, 별도 telemetry subsystem 없이 execution accounting 결과를 그대로 보여 준다.</div></article></div>
+    </section><section class="page break">
+        <header class="section-head">
+            <div class="section-head-main">
+                <div class="section-index">섹션 10</div>
+                <h2 class="section-title">Complexity Analysis</h2>
+                <p class="section-lead">이 엔진은 asymptotic 관점에서 설명하기에 충분히 작고, exact lookup 구조와 ordered traversal, recovery 작업 사이의 trade-off를 보여 주기에 충분히 깊다. 아래 차트는 리뷰어가 기대해야 할 상대적 비용 프로파일을 요약한다.</p>
+            </div>
+        </header>
+        <div class="grid-2"><article class="card"><h3 class="card-title">Relative Cost Profile</h3><div class="figure"><div class="diagram-frame">
+<svg viewBox="0 0 980 350" role="img" aria-label="상대 복잡도 차트">
+    <rect x="24" y="18" width="932" height="314" rx="24" class="frame-soft"></rect>
+    <text x="42" y="56" class="text text-strong">Relative operation cost</text>
+
+    <line x1="180" y1="84" x2="180" y2="286" stroke="#374151" stroke-width="1.2"></line>
+    <line x1="180" y1="286" x2="914" y2="286" stroke="#374151" stroke-width="1.2"></line>
+
+    <text x="42" y="110" class="text-small">Parse and tokenize</text>
+    <text x="42" y="152" class="text-small">Hash exact lookup</text>
+    <text x="42" y="194" class="text-small">B+ Tree exact lookup</text>
+    <text x="42" y="236" class="text-small">B+ Tree range scan</text>
+    <text x="42" y="278" class="text-small">Snapshot load + WAL replay</text>
+
+    <rect x="198" y="92" width="148" height="18" rx="9" class="frame"></rect>
+    <rect x="198" y="134" width="118" height="18" rx="9" class="accent-fill"></rect>
+    <rect x="198" y="176" width="202" height="18" rx="9" class="frame"></rect>
+    <rect x="198" y="218" width="248" height="18" rx="9" class="accent-fill"></rect>
+    <rect x="198" y="260" width="322" height="18" rx="9" class="frame"></rect>
+
+    <text x="544" y="106" class="text-small">O(L)</text>
+    <text x="544" y="148" class="text-small">Avg O(1), worst O(n)</text>
+    <text x="544" y="190" class="text-small">O(log_B n)</text>
+    <text x="544" y="232" class="text-small">O(log_B n + k)</text>
+    <text x="544" y="274" class="text-small">O(n) + O(m log_B n)</text>
+</svg>
+</div><p class="figure-caption">정렬이 중요한 query에서는 point lookup보다 B+ Tree range scan이 더 좋은 path가 될 수 있다. 비용 구조가 다르기 때문이다.</p></div></article><article class="card"><h3 class="card-title">Complexity Table</h3><table class="table"><thead><tr><th>Operation</th><th class="mono">Complexity</th><th>의미</th></tr></thead><tbody><tr><td>Tokenize + parse</td><td class="mono"><span class="mono">O(L)</span></td><td>query text 길이에 선형이므로 front end 동작이 예측 가능하다.</td></tr><tr><td>Hash exact lookup</td><td class="mono"><span class="mono">O(1)</span> average</td><td>id 또는 department equality filter에서 가장 강력하다.</td></tr><tr><td>B+ Tree exact lookup</td><td class="mono"><span class="mono">O(log_B n)</span></td><td>작은 tree height로 안정적인 ordered search를 제공한다.</td></tr><tr><td>B+ Tree range scan</td><td class="mono"><span class="mono">O(log_B n + k)</span></td><td>한 번 seek한 뒤 leaf chain을 streaming한다.</td></tr><tr><td>Insert / delete with index maintenance</td><td class="mono"><span class="mono">O(log_B n)</span></td><td>record lookup/allocation 이후에는 B+ Tree maintenance가 지배 비용이다.</td></tr><tr><td>Snapshot load</td><td class="mono"><span class="mono">O(n)</span></td><td>모든 row가 normal insert path로 다시 구성된다.</td></tr><tr><td>WAL replay</td><td class="mono"><span class="mono">O(m log_B n)</span></td><td>replay 길이와 index rebuild 비용에 비례한다.</td></tr><tr><td>Result-grid sort fallback</td><td class="mono"><span class="mono">O(r log r)</span></td><td>planner가 native order를 보존하지 못할 때만 사용한다.</td></tr></tbody></table></article></div>
+    </section><section class="page break">
+    <header class="section-head">
+        <div class="section-head-main">
+            <div class="section-index">섹션 11</div>
+            <h2 class="section-title">Future Scaling Roadmap</h2>
+            <p class="section-lead">현재 구조는 의도적으로 compact하지만, 이미 더 큰 storage-engine 작업으로 확장될 seam을 갖고 있다. 아래 roadmap은 pure C core를 유지하면서 disk management, richer planning, 그리고 더 강한 assistant behavior로 확장하는 방향을 정리한다.</p>
+        </div>
+    </header>
+    <div class="roadmap"><article class="horizon"><div class="small-label">Near-term</div><h3 class="horizon-title">Local engine depth</h3><p>slotted-page serialization, richer index statistic, 더 정교한 predicate normalization을 추가하되 현재 in-memory API surface는 유지한다.</p></article><article class="horizon"><div class="small-label">Mid-term</div><h3 class="horizon-title">Storage realism</h3><p>buffer-pool abstraction, asynchronous checkpointing, composite index, 더 명시적인 recovery metadata를 도입해 SAVE/LOAD를 page-oriented persistence로 확장한다.</p></article><article class="horizon"><div class="small-label">Long-term</div><h3 class="horizon-title">DB studio evolution</h3><p>기존 parser boundary를 유지한 채 MVCC, cost-based optimizer, validated natural-language-to-query conversion을 올린다.</p></article><div class="card quote-card"><h3 class="card-title">Roadmap Principle</h3><p>다음 단계로 갈수록 현재 프로젝트의 장점은 더 강화되어야 한다. explainable internals, reusable boundary, 그리고 실제 engine behavior를 시각화하는 UI가 핵심이다.</p></div>
+</section><section class="page break">
+    <header class="section-head">
+        <div class="section-head-main">
+            <div class="section-index">섹션 12</div>
+            <h2 class="section-title">Final Engineering Summary</h2>
+            <p class="section-lead">MiniDB Studio가 포트폴리오 시스템으로 설득력을 가지는 이유는 engine, optimizer, recovery path, desktop shell이 하나의 일관된 서사를 만들기 때문이다. 몇 분 안에 설명할 수 있을 만큼 compact하고, indexing, ownership, execution trade-off를 깊게 이야기할 만큼 충분히 rich하다.</p>
+        </div>
+    </header>
+    <div class="footer-summary"><article class="card"><h3 class="card-title">왜 이 설계가 일관적인가</h3><div class="timeline"><div class="timeline-row"><div class="timeline-tag">Reusable core</div><div>동일한 parser, planner, database code가 console과 desktop studio를 함께 구동한다. 그래서 구조가 “복제된 UI”가 아니라 의도된 architecture로 보인다.</div></div><div class="timeline-row"><div class="timeline-tag">Explainable performance</div><div>Hash lookup, B+ Tree traversal, scan count, cache hit가 모두 눈에 보이므로 하나의 query path를 실제 엔진 수준에서 설명할 수 있다.</div></div><div class="timeline-row"><div class="timeline-tag">Recovery clarity</div><div>CSV snapshot + WAL replay 조합은 durability, restore safety, index reconstruction을 명확한 mental model로 정리해 준다.</div></div></div></article><article class="card"><h3 class="card-title">포트폴리오 포지셔닝</h3><p class="card-copy">MiniDB Studio는 시스템 프로그래밍 면접에서 좋은 인상을 주는 판단을 보여 준다. explicit ownership rule, data-structure-aware query planning, predictable recovery, 그리고 low-level decision을 읽기 쉽게 드러내는 presentation layer가 핵심이다.</p><div class="note">20초 데모 포인트: pure C storage core, hash + B+ Tree indexing, WAL-backed recovery, shared executor boundary, 그리고 query plan과 runtime metric을 시각화하는 desktop studio.</div></article></div>
+</section>
+            </main>
+        </body>
+        </html>

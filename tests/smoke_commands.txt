@@ -1,0 +1,15 @@
+INSERT 1 Alice 29 Oncology
+INSERT 2 "Bob Stone" 41 Cardiology
+INSERT 3 Carol 35 Oncology
+INSERT 4 Daniel 52 Radiology
+SELECT WHERE age > 30 AND department = Oncology ORDER BY age LIMIT 5
+SELECT ORDER BY age LIMIT 3
+COUNT WHERE age > 30 OR department = Cardiology
+SAVE
+UPDATE id=1 age=31 department=Neurology
+DELETE id=4
+LOAD
+SELECT *
+HISTORY
+BENCHMARK 1000
+EXIT

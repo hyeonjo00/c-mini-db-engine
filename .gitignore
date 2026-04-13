@@ -1,0 +1,10 @@
+build/
+*.o
+*.obj
+*.exe
+*.pyc
+__pycache__/
+tools/__pycache__/
+data/query.log
+data/db.log
+data/benchmark.csv

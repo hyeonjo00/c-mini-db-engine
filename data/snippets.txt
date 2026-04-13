@@ -1,0 +1,2 @@
+# MiniDB Studio snippets
+INSERT 1001 Alice 29 Oncology|INSERT 1001 Alice 29 Oncology\r\nINSERT 1002 Bob 35 Cardiology\r\nINSERT 1003 Charlie 41 Neurology\r\nINSERT 1004 David 52 Oncology\r\nINSERT 1005 Emma 31 Radiology\r\nINSERT 1006 Frank 27 Emergency\r\nINSERT 1007 Grace 44 Oncology\r\nINSERT 1008 Henry 38 Pediatrics\r\nINSERT 1009 Irene 61 Cardiology\r\nINSERT 1010 Jack 33 Neurology
