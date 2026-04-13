@@ -38,7 +38,7 @@ The latest desktop pass turns the app into a studio-style workflow instead of a 
 - Added a storage browser for snapshot path, WAL size, record count, last save time, and storage health
 - Preserved the pure C engine and the UI-neutral executor boundary from the previous desktop release
 
-## Why This Is Portfolio-Strong
+## Why This Project Stands Out
 
 This project now feels like a lightweight database studio written in C, not just a terminal toy. It shows:
 
