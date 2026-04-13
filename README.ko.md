@@ -1,6 +1,6 @@
 # c-mini-db-engine
 
-[English README](README.md)
+[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md)
 
 `c-mini-db-engine`는 이제 두 개의 계층으로 구성된 포트폴리오 프로젝트입니다.
 
