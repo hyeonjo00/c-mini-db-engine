@@ -1,5 +1,7 @@
 # c-mini-db-engine
 
+[한국어 README](README.ko.md)
+
 `c-mini-db-engine` is now a two-layer portfolio project:
 
 - a reusable pure C11 storage engine
